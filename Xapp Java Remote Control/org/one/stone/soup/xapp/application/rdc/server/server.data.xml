@@ -1,0 +1,12 @@
+<data source="server-settings" name="server-settings">
+	<serverAddress>127.0.0.1</serverAddress>
+	<serverPort>169</serverPort>
+	<useHub>true</useHub>
+	<userName>Server User</userName>
+	<password>password</password>
+	<hubAddress>127.0.0.1</hubAddress>
+	<hubPort>169</hubPort>
+	<autoAccept>true</autoAccept>
+	<start>Start</start>
+	<stop>Stop</stop>
+</data>
