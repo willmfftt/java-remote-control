@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Java Remote Control</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>Java Remote Control</name>
+			<type>2</type>
+			<location>./Java Remote Control</location>
+		</link>
+		<link>
+			<name>Xapp Java Remote Control</name>
+			<type>2</type>
+			<location>./Xapp Java Remote Control</location>
+		</link>
+	</linkedResources>
+</projectDescription>
