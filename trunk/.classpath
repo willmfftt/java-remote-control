@@ -3,5 +3,8 @@
 	<classpathentry kind="src" path="Java Remote Control"/>
 	<classpathentry kind="src" path="Xapp Java Remote Control"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Open Forum"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Xapp"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
