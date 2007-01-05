@@ -1,0 +1,36 @@
+#summary How to get your development environment up and running.
+#labels Featured
+
+= Required Software =
+  * Java SE JDK from [http://java.sun.com/javase/downloads]
+  * Eclipse IDE from [http://www.eclipse.org]
+  * Subclipse eclipse plugin from [http://subclipse.tigris.org/]
+
+= How to set up in Eclipse =
+
+Having installed Eclipse and added the Subclipse plugin:
+  # In Eclipse, open the 'SVN Repository Exploring' perspective
+  # Right click on the perspective and select 'New' -> 'Repository'
+  # Enter 'https://java-remote-control.googlecode.com/svn/trunk/' as the URL
+    * You will be prompted for your User Name and Password which can be found under the 'Source' tab above
+  # Right click on the repository icon in the 'SVN Repository Exploring' perspective and select 'Checkout'
+  # Select 'Check out as a project in the workspace' and set the Project Name as 'One Stone Soup Java Remote Control'
+  # Select 'Next.
+  # Select 'Use default workspace location' then 'Finish'
+  # Select 'Yes' in the 'Checkout repository root' dialog
+  # Once the project has been retrieved, return to the 'Java' perspective and the new project will be visible
+
+= How to get the latest libraries =
+  # Right click on the build.xml file in the build directory of the project
+  # Select 'Run As' and the second Ant Build '2 Ant Build'
+  # Under the 'Check targets to execute:' list check the 'get-latest-jars' target and uncheck all others
+  # Select 'Run'
+
+= How to build the project =
+  # Right click on the build.xml file in the build directory of the project
+  # Select 'Run As' -> 'Ant Build'
+
+The built project is placed in the release directory
+
+*Please report any faults with this process under the Issues tab and post any difficulties you are experiencing to the [http://groups.google.com/group/one-stone-soup One Stone Soup Google Group]*
+
