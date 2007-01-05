@@ -7,13 +7,9 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.one.stone.soup.grfx.ImageFactory;
-import org.one.stone.soup.remote.control.client.RemoteClientController;
 import org.one.stone.soup.remote.control.client.RemoteControlClient;
-import org.one.stone.soup.xapp.containers.XappScrollPane;
 import org.one.stone.soup.xapp.resource.manager.XuiResourceManager;
 import org.one.stone.soup.xapp.swing.components.XappSwingImage;
 

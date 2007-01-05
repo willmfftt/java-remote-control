@@ -57,8 +57,14 @@ public class RemoteControlServer extends PlainServer implements ScreenRecorderLi
 	 */
 	public void route(Socket socket, RouterThread routerThread) {
 		
-		SocketConnection connection = new SocketConnection( socket,socket.getInetAddress().getHostAddress() );
-		route( connection,routerThread );
+		try{
+			SocketConnection connection = new SocketConnection( socket,socket.getInetAddress().getHostAddress() );
+			route( connection,routerThread );
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public void route(Connection connection, RouterThread routerThread) {
