@@ -23,7 +23,6 @@ import org.one.stone.soup.remote.control.hub.HubHelper;
 import org.one.stone.soup.screen.recorder.ScreenPlayer;
 import org.one.stone.soup.server.http.client.HttpTunnelConnection;
 import org.one.stone.soup.stringhelper.StringArrayHelper;
-import org.one.stone.soup.stringhelper.StringGenerator;
 import org.one.stone.soup.util.TimeWatch;
 import org.one.stone.soup.xapp.XApplication;
 import org.one.stone.soup.xapp.XappRootApplication;
@@ -238,7 +237,6 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 		String useHub = XappRootApplication.getAPI().getField("client-settings","useHub");	
 		
 		String hubAlias = XappRootApplication.getAPI().getField("client-settings","userName");
-		String password = XappRootApplication.getAPI().getField("client-settings","password");
 		
 		boolean useTunnel = new Boolean(XappRootApplication.getAPI().getField("client-settings","useTunnel")).booleanValue();	
 		String tunnelHost = XappRootApplication.getAPI().getField("client-settings","tunnelHost");	
@@ -246,11 +244,9 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 		boolean viewOnly = new Boolean(XappRootApplication.getAPI().getField("client-settings","viewOnly")).booleanValue();		
 		
 		try{
-			String tunnelId = StringGenerator.generateUniqueId();
-			
 			if(useTunnel==true)
 			{
-				mainConnection = new HttpTunnelConnection(tunnelHost,address,port,tunnelId);
+				mainConnection = new HttpTunnelConnection(tunnelHost,address,port);
 			}
 			else
 			{
@@ -290,7 +286,7 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 						
 			if(useTunnel==true)
 			{
-				controlConnection = new HttpTunnelConnection(tunnelHost,address,port,tunnelId);
+				controlConnection = new HttpTunnelConnection(tunnelHost,address,port);
 			}
 			else
 			{

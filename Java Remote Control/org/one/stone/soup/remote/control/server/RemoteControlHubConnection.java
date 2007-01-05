@@ -54,12 +54,10 @@ public class RemoteControlHubConnection implements Runnable{
 	}
 	public void connect(String tunnelUrl,String address,int port) throws IOException
 	{	
-		String tunnelId = null;
 		
 		if(tunnelUrl!=null)
 		{
-			tunnelId = StringGenerator.generateUniqueId();
-			screenConnection = new HttpTunnelConnection(tunnelUrl,address,port,tunnelId);
+			screenConnection = new HttpTunnelConnection(tunnelUrl,address,port);
 		}
 		else
 		{
@@ -72,7 +70,7 @@ public class RemoteControlHubConnection implements Runnable{
 		
 		if(tunnelUrl!=null)
 		{
-			controlConnection = new HttpTunnelConnection(tunnelUrl,address,port,tunnelId);
+			controlConnection = new HttpTunnelConnection(tunnelUrl,address,port);
 		}
 		else
 		{

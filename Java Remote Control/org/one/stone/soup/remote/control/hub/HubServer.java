@@ -15,10 +15,10 @@ import org.one.stone.soup.authentication.server.Login;
 import org.one.stone.soup.constants.TimeConstants;
 import org.one.stone.soup.io.Connection;
 import org.one.stone.soup.io.ConnectionListener;
-import org.one.stone.soup.net.SocketToSocketConnection;
+import org.one.stone.soup.io.StreamConnection;
+import org.one.stone.soup.net.SocketConnection;
 import org.one.stone.soup.server.PlainServer;
 import org.one.stone.soup.server.RouterThread;
-import org.one.stone.soup.server.Server;
 import org.one.stone.soup.server.http.Logger;
 import org.one.stone.soup.stringhelper.StringArrayHelper;
 import org.one.stone.soup.util.TimeWatch;
@@ -48,7 +48,7 @@ public class HubServer extends PlainServer implements ConnectionListener,ActionL
 		String alias;
 		Socket serverSocket;
 		Socket clientSocket;
-		SocketToSocketConnection connection;
+		SocketConnection connection;
 		
 		public Session()
 		{
@@ -281,7 +281,7 @@ public class HubServer extends PlainServer implements ConnectionListener,ActionL
 
 		session.clientSocket = client;
 		try{
-			session.connection = new SocketToSocketConnection(session.clientSocket,session.serverSocket,alias,this,TimeConstants.SECOND_MILLIS*15);
+			session.connection = new SocketConnection(session.clientSocket,session.serverSocket,alias,this);
 			logger.log("Hub session "+alias+" connected for "+user);
 		}
 		catch(Exception e)
@@ -372,5 +372,20 @@ public class HubServer extends PlainServer implements ConnectionListener,ActionL
 			}
 		}
 		return false;
+	}
+
+	public void downStreamConnectionCreated(StreamConnection arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sent(byte[] arg0, int arg1, StreamConnection arg2) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void upStreamConnectionCreated(StreamConnection arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
