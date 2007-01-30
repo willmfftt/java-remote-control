@@ -2,6 +2,11 @@
 	<menuBar>
 	</menuBar>
 	<view>
+		<container type="splitPane" name="outer">
+		<top>
+			<table name="view" cellPadding="5" rowPadding="2"/>
+		</top>
+		<bottom>
 		<container type="scrollPane" name="main">
 	<table name="server" cellPadding="5" rowPadding="2">
 		<tr>
@@ -99,7 +104,8 @@
 			</td>
 		</tr>
 	</table>
-
+		</container>
+	</bottom>
 		</container>
 	</view>
 	
