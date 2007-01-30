@@ -238,20 +238,20 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 		
 		String hubAlias = XappRootApplication.getAPI().getField("client-settings","userName");
 		
-		boolean useTunnel = new Boolean(XappRootApplication.getAPI().getField("client-settings","useTunnel")).booleanValue();	
-		String tunnelHost = XappRootApplication.getAPI().getField("client-settings","tunnelHost");	
+//		boolean useTunnel = new Boolean(XappRootApplication.getAPI().getField("client-settings","useTunnel")).booleanValue();	
+//		String tunnelHost = XappRootApplication.getAPI().getField("client-settings","tunnelHost");	
 
 		boolean viewOnly = new Boolean(XappRootApplication.getAPI().getField("client-settings","viewOnly")).booleanValue();		
 		
 		try{
-			if(useTunnel==true)
+			/*if(useTunnel==true)
 			{
 				mainConnection = new HttpTunnelConnection(tunnelHost,address,port);
 			}
 			else
-			{
+			{*/
 				mainConnection = new SocketConnection( new Socket(address,port),address+":"+port );
-			}
+			//}
 		
 			client = new XappRDCView(new DefaultXuiResourceManager(),this);
 			showClient();
@@ -284,14 +284,14 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 			
 			clientRunning = true;
 						
-			if(useTunnel==true)
+			/*if(useTunnel==true)
 			{
 				controlConnection = new HttpTunnelConnection(tunnelHost,address,port);
 			}
 			else
-			{
+			{*/
 				controlConnection = new SocketConnection( new Socket(address,port),address+":"+port );
-			}
+			//}
 			
 			if(useHub.equals("true"))
 			{
