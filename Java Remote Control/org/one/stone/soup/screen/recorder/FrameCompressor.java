@@ -24,7 +24,7 @@ public class FrameCompressor {
 			{
 				previousData=newData;
 			}
-			this.newData = newData;
+			this.newData = new int[newData.length];
 		}
 		
 		private OutputStream oStream;
