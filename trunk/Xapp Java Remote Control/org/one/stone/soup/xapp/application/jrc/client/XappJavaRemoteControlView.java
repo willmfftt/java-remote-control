@@ -1,4 +1,4 @@
-package org.one.stone.soup.xapp.application.rdc.client;
+package org.one.stone.soup.xapp.application.jrc.client;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -13,13 +13,13 @@ import org.one.stone.soup.remote.control.client.RemoteControlClient;
 import org.one.stone.soup.xapp.resource.manager.XuiResourceManager;
 import org.one.stone.soup.xapp.swing.components.XappSwingImage;
 
-public class XappRDCView extends XappSwingImage implements RemoteControlClient {
+public class XappJavaRemoteControlView extends XappSwingImage implements RemoteControlClient {
 
-	private XappRDCClient controller;
+	private XappJavaRemoteControlClient controller;
 	private JFrame tempFrame;
 	private ImageIcon viewIcon;
 	
-	public XappRDCView(XuiResourceManager resourceManager,XappRDCClient controller)
+	public XappJavaRemoteControlView(XuiResourceManager resourceManager,XappJavaRemoteControlClient controller)
 	{
 		super(resourceManager);
 		this.controller = controller;

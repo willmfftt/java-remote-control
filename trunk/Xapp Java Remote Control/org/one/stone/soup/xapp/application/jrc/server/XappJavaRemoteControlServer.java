@@ -1,4 +1,4 @@
-package org.one.stone.soup.xapp.application.rdc.server;
+package org.one.stone.soup.xapp.application.jrc.server;
 
 import java.awt.Frame;
 import java.io.File;
@@ -26,7 +26,7 @@ import org.one.stone.soup.xapp.filebrowser.XappFileBrowser;
 import org.one.stone.soup.xml.XmlElement;
 import org.one.stone.soup.xml.stream.XmlLoader;
 
-public class XappRDCServer extends XApplication implements RemoteControlServerApplication{
+public class XappJavaRemoteControlServer extends XApplication implements RemoteControlServerApplication{
 
 	private String currentFile=null;
 	private RemoteControlServer server;
@@ -42,7 +42,7 @@ public class XappRDCServer extends XApplication implements RemoteControlServerAp
 			APP_DEFINITION_PATH = args[0];
 		}
 		try{
-			new XappRDCServer();
+			new XappJavaRemoteControlServer();
 		}
 		catch(Exception e)
 		{
@@ -50,9 +50,9 @@ public class XappRDCServer extends XApplication implements RemoteControlServerAp
 		}
 	}	
 	
-	public XappRDCServer() throws Exception
+	public XappJavaRemoteControlServer() throws Exception
 	{
-		super(APP_DEFINITION_PATH+"rdc-server.xml");
+		super(APP_DEFINITION_PATH+"jrc-server.xapp");
 		
 		initialise();
 		
