@@ -1,0 +1,5 @@
+<data source="Proxy Form" name="Proxy Form">
+	<useProxy>false</useProxy>
+	<host></host>
+	<port>80</port>
+</data>
