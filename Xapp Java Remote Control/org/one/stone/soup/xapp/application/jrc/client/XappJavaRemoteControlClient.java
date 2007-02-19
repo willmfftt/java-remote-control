@@ -1,4 +1,4 @@
-package org.one.stone.soup.xapp.application.rdc.client;
+package org.one.stone.soup.xapp.application.jrc.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,14 +35,14 @@ import org.one.stone.soup.xapp.resource.manager.DefaultXuiResourceManager;
 import org.one.stone.soup.xml.XmlElement;
 import org.one.stone.soup.xml.stream.XmlLoader;
 
-public class XappRDCClient extends XApplication implements RemoteClientController,MouseListener,MouseMotionListener,ActionListener{
+public class XappJavaRemoteControlClient extends XApplication implements RemoteClientController,MouseListener,MouseMotionListener,ActionListener{
 
 	private String currentFile=null;
 	
 	private boolean clientRunning = false;
 	private boolean fullscreen = false;
 	
-	private XappRDCView client;
+	private XappJavaRemoteControlView client;
 	
 	private Connection mainConnection;
 	private Connection controlConnection;
@@ -62,7 +62,7 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 			APP_DEFINITION_PATH = args[0];
 		}
 		try{
-			new XappRDCClient();
+			new XappJavaRemoteControlClient();
 		}
 		catch(Exception e)
 		{
@@ -70,9 +70,9 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 		}
 	}	
 	
-	public XappRDCClient() throws Exception
+	public XappJavaRemoteControlClient() throws Exception
 	{
-		super(APP_DEFINITION_PATH+"rdc-client.xml");
+		super(APP_DEFINITION_PATH+"jrc-client.xapp");
 		
 		initialise();
 		timeoutTimer = new TimeWatch(30000);
@@ -253,7 +253,7 @@ public class XappRDCClient extends XApplication implements RemoteClientControlle
 				mainConnection = new SocketConnection( new Socket(address,port),address+":"+port );
 			//}
 		
-			client = new XappRDCView(new DefaultXuiResourceManager(),this);
+			client = new XappJavaRemoteControlView(new DefaultXuiResourceManager(),this);
 			showClient();
 			
 			if(useHub.equals("true"))
