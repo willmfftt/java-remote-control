@@ -13,6 +13,11 @@
            showduration="5000"/>
 </target>
 
+<target name="clean-up">
+	<delete dir="./work"/>
+	<delete dir="./classes"/>
+</target>
+	
 <target name="get-latest-jars" depends="initialise">
 	<get src="http://onestonesoup.googlecode.com/svn/trunk/release/core.jar" dest="../Java Remote Control/lib/core.jar"/>
 	<get src="http://onestonessoup-xapp.googlecode.com/svn/trunk/release/xapp.jar" dest="../Xapp Java Remote Control/lib/xapp.jar"/>
