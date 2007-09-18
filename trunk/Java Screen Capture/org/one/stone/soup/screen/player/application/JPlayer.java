@@ -40,7 +40,7 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 	private JLabel text;
 	private JLabel frameLabel;
 	
-	private File target;
+	private String target;
 	private int frameCount;
 	private long startTime;
 	
@@ -57,7 +57,7 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 		play = new JButton("Open Recording");
 		play.setActionCommand("open");
 		play.setForeground(green);
-		play.addActionListener(this);
+		play.addActionListener(this);		
 
 		pause = new JButton("Pause");
 		pause.setActionCommand("pause");
@@ -117,9 +117,12 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 		if(ev.getActionCommand().equals("open"))
 		{
 			JFileChooser chooser = new JFileChooser();
-			chooser.setSelectedFile(target);
+			if(target!=null)
+			{
+				chooser.setSelectedFile( new File(target) );
+			}
 			chooser.showOpenDialog(this);
-			target = chooser.getSelectedFile();
+			target = chooser.getSelectedFile().getAbsolutePath();
 
 			if(target!=null)
 			{
@@ -140,7 +143,7 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 			play.setActionCommand("play");
 			play.setText("Play");
 
-			text.setText("Ready to play "+target.getName());
+			text.setText("Ready to play "+new File(target).getName());
 		}
 		else if(ev.getActionCommand().equals("play"))
 		{
@@ -152,7 +155,7 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 			fastForward.setEnabled(true);
 			stop.setEnabled(true);
 
-			text.setText("Playing "+target.getName());
+			text.setText("Playing "+target);
 		}
 		else if(ev.getActionCommand().equals("fastForward"))
 		{
@@ -162,7 +165,7 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 			
 			player.fastforward();
 
-			text.setText("Fast Forward "+target.getName());
+			text.setText("Fast Forward "+target);
 		}
 		else if(ev.getActionCommand().equals("pause"))
 		{
@@ -172,7 +175,7 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 			
 			player.pause();
 			
-			text.setText("Paused "+target.getName());
+			text.setText("Paused "+target);
 		}
 		else if(ev.getActionCommand().equals("stop"))
 		{

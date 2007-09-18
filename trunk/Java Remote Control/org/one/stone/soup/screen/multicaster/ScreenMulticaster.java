@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import org.one.stone.soup.screen.recorder.FrameCompressor;
 import org.one.stone.soup.screen.recorder.FrameDecompressor;
 
-public class ScreenMulticaster {
+public class ScreenMulticaster implements Runnable{
 
 	private int frameSize;
 	private FrameDecompressor decompressor;
@@ -18,6 +18,8 @@ public class ScreenMulticaster {
 	{
 		this.frameSize = frameSize;
 		decompressor = new FrameDecompressor( iStream,frameSize );
+		
+		new Thread(this,"Screen Multicaster").start();
 	}
 	
 	public void addClient(String alias,OutputStream oStream)

@@ -64,13 +64,17 @@ public class FrameDecompressor {
 		frame.nextFrame();
 		
 		//try{
-			int time = frame.iStream.read();
+			int i = frame.iStream.read();
+			int time = i;
 			time = time << 8;
-			time += frame.iStream.read();
+			i = frame.iStream.read();
+			time += i;
 			time = time << 8;
-			time += frame.iStream.read();
+			i = frame.iStream.read();
+			time += i;
 			time = time << 8;
-			time += frame.iStream.read();
+			i = frame.iStream.read();
+			time += i;
 			
 			frame.frameTimeStamp = (long)time;
 			//System.out.println("ft:"+frameTime);
@@ -91,13 +95,17 @@ public class FrameDecompressor {
 
 		ByteArrayOutputStream bO = new ByteArrayOutputStream();		
 		try{
-			int zSize = frame.iStream.read();
+			i = frame.iStream.read();
+			int zSize = i;
 			zSize = zSize << 8;
-			zSize += frame.iStream.read();
+			i = frame.iStream.read();
+			zSize += i;
 			zSize = zSize << 8;
-			zSize += frame.iStream.read();
+			i = frame.iStream.read();
+			zSize += i;
 			zSize = zSize << 8;
-			zSize += frame.iStream.read();
+			i = frame.iStream.read();
+			zSize += i;
 
 			byte[] zData = new byte[zSize];
 			int readCursor = 0;

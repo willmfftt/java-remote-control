@@ -38,6 +38,16 @@
 			<exclude name="**/.classpath"/>
 			<exclude name="**/.project"/>
 		</fileset>
+		<fileset dir="../Java Screen Capture">
+			<exclude name="**/*.class"/>
+			<exclude name="**/.classpath"/>
+			<exclude name="**/.project"/>
+		</fileset>
+		<fileset dir="../Screen Multicaster">
+			<exclude name="**/*.class"/>
+			<exclude name="**/.classpath"/>
+			<exclude name="**/.project"/>
+		</fileset>
 	</copy>
 
 	<delete dir="./classes"/>
