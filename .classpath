@@ -6,5 +6,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Xapp"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Open Forum"/>
+	<classpathentry kind="src" path="Java Screen Capture"/>
+	<classpathentry kind="src" path="Screen Multicaster"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

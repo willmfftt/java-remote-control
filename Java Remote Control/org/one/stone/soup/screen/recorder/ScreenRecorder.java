@@ -164,7 +164,6 @@ public abstract class ScreenRecorder implements Runnable{
 		recordArea = initialiseScreenCapture();
 		
 		try{
-
 			oStream.write( (recordArea.width & 0x0000FF00) >>>8 );
 			oStream.write( (recordArea.width & 0x000000FF) );
 		
@@ -210,5 +209,9 @@ public abstract class ScreenRecorder implements Runnable{
 	public void sendKeyFrame()
 	{
 		//TODO
+	}
+
+	public int getFrameSize() {
+		return frameSize;
 	}
 }

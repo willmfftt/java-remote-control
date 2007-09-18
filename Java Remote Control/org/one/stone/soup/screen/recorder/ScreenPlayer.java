@@ -28,6 +28,7 @@ public class ScreenPlayer implements Runnable{
 	private boolean running;
 	private boolean paused;
 	private boolean fastForward;
+	private boolean realtime = false;
 
 	public ScreenPlayer(InputStream iStream,ScreenPlayerListener listener)
 	{
@@ -65,7 +66,10 @@ public class ScreenPlayer implements Runnable{
 	
 	public void pause()
 	{
-		paused=true;
+		if(realtime==false)
+		{
+			paused=true;
+		}
 	}
 	
 	public void stop()
@@ -88,7 +92,7 @@ public class ScreenPlayer implements Runnable{
 		running=true;
 		while(running==true)
 		{
-			while(paused==true)
+			while(paused==true && realtime==false)
 			{
 				try{ Thread.sleep(50); }catch(Exception e){}					
 				startTime += 50;
@@ -111,7 +115,7 @@ public class ScreenPlayer implements Runnable{
 			}
 			else
 			{
-				while( System.currentTimeMillis()-startTime<frameTime && running )
+				while( (System.currentTimeMillis()-startTime<frameTime && realtime==false) && running )
 				{
 					try{ Thread.sleep(100); }catch(Exception e){}
 				}
@@ -151,5 +155,13 @@ public class ScreenPlayer implements Runnable{
 			mis.newPixels(frame.getData(),ColorModel.getRGBdefault(),0,area.width);
 			return;
 		}		
+	}
+
+	public boolean isRealtime() {
+		return realtime;
+	}
+
+	public void setRealtime(boolean realtime) {
+		this.realtime = realtime;
 	}
 }
