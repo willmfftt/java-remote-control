@@ -22,6 +22,7 @@ public class JScreenShareApplet extends JApplet implements ScreenRecorderListene
 		private ScreenRecorder recorder;
 
 		private JLabel text;
+		private JLabel frameLabel;
 		private int frameCount;
 		
 		private Socket socket; 
@@ -34,10 +35,10 @@ public class JScreenShareApplet extends JApplet implements ScreenRecorderListene
 			panel.setLayout(new GridLayout(1,2));
 			panel.setBackground(Color.black);
 			
-			JLabel frameLabel = new JLabel("Frame: 0 Time: 0");
+			frameLabel = new JLabel("Frame: 0");
 			frameLabel.setBackground(Color.black);
 			frameLabel.setForeground(Color.red);
-			text=new JLabel("No recording selected");
+			text=new JLabel("Not Connected");
 			text.setBackground(Color.black);
 			text.setForeground(Color.red);
 			
@@ -68,6 +69,8 @@ public class JScreenShareApplet extends JApplet implements ScreenRecorderListene
 				
 				recorder = new DesktopScreenRecorder(socket.getOutputStream(),this);
 				recorder.startRecording();
+				
+				text.setText("Connected to "+address+":"+port);
 			}
 			catch(IOException ioe)
 			{
@@ -79,13 +82,22 @@ public class JScreenShareApplet extends JApplet implements ScreenRecorderListene
 		public void frameRecorded(boolean fullFrame)
 		{
 			frameCount++;
-			text.setText("Frame: "+frameCount);		
+			frameLabel.setText("Frame: "+frameCount);		
+			
+			try{
+				socket.getInputStream().read();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				recorder.stopRecording();
+			}
 		}
 
 		public void recordingStopped()
 		{
 			recorder = null;
 			
-			text.setText("Ready to record");
+			text.setText("Not Connected");
 		}	
 }

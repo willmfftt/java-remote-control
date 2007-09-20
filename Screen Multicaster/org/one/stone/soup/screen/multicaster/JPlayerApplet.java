@@ -42,7 +42,7 @@ public class JPlayerApplet extends JApplet implements ScreenPlayerListener{
 		frameLabel = new JLabel("Frame: 0 Time: 0");
 		frameLabel.setBackground(Color.black);
 		frameLabel.setForeground(Color.red);
-		text=new JLabel("No recording selected");
+		text=new JLabel("Not Connected");
 		text.setBackground(Color.black);
 		text.setForeground(Color.red);
 		
@@ -77,6 +77,8 @@ public class JPlayerApplet extends JApplet implements ScreenPlayerListener{
 			frameCount=0;
 			player.play();
 			startTime = System.currentTimeMillis();
+
+			text.setText("Connected to "+address+":"+port);
 		}
 		catch(Exception e)
 		{
@@ -87,7 +89,7 @@ public class JPlayerApplet extends JApplet implements ScreenPlayerListener{
 
 	public void playerStopped()
 	{
-		text.setText("No recording selected");	
+		text.setText("Not Connected");	
 		player=null;		
 	}
 
