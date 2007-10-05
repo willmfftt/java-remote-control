@@ -1,6 +1,13 @@
 package org.one.stone.soup.screen.recorder;
 
 import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -37,6 +44,22 @@ public class DesktopScreenRecorder extends ScreenRecorder{
 
 	public BufferedImage captureScreen(Rectangle recordArea)
 	{
-		return robot.createScreenCapture(recordArea);
+		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+		BufferedImage image = robot.createScreenCapture(recordArea);
+		
+		Polygon pointer = new Polygon(new int[]{0,16,10,8},new int[]{0,8,10,16},4);
+		Polygon pointerShadow = new Polygon(new int[]{6,21,16,14},new int[]{1,9,11,17},4);
+		
+		Graphics2D grfx = image.createGraphics();
+		grfx.translate(mousePosition.x,mousePosition.y);
+		grfx.setColor( new Color(100,100,100,100) );
+		grfx.fillPolygon( pointerShadow );
+		grfx.setColor( new Color(100,100,255,200) );
+		grfx.fillPolygon( pointer );
+		grfx.setColor( Color.red );
+		grfx.drawPolygon( pointer );
+		grfx.dispose();
+		
+		return image;
 	}	
 }
