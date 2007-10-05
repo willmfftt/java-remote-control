@@ -10,11 +10,13 @@ import java.net.Socket;
 
 import javax.swing.JApplet;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.one.stone.soup.screen.recorder.DesktopScreenRecorder;
 import org.one.stone.soup.screen.recorder.ScreenRecorder;
 import org.one.stone.soup.screen.recorder.ScreenRecorderListener;
+import org.one.stone.soup.stringhelper.StringGenerator;
 import org.one.stone.soup.xml.XmlElement;
 
 public class JScreenShareApplet extends JApplet implements ScreenRecorderListener{
@@ -57,7 +59,10 @@ public class JScreenShareApplet extends JApplet implements ScreenRecorderListene
 			String page = getParameter("page");
 			
 			try{
+				String id = StringGenerator.generatePassword();
+				
 				XmlElement header = new XmlElement("Recorder");
+				header.addAttribute("id",id);
 				Rectangle screen = new Rectangle( Toolkit.getDefaultToolkit ().getScreenSize() );
 				
 				socket = new Socket(address,Integer.parseInt(port));
@@ -70,7 +75,7 @@ public class JScreenShareApplet extends JApplet implements ScreenRecorderListene
 				recorder = new DesktopScreenRecorder(socket.getOutputStream(),this);
 				recorder.startRecording();
 				
-				text.setText("Connected to "+address+":"+port);
+				text.setText("WebCast ID:"+id);
 			}
 			catch(IOException ioe)
 			{

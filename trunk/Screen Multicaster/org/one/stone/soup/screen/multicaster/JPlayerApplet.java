@@ -10,6 +10,7 @@ import java.net.Socket;
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -59,7 +60,14 @@ public class JPlayerApplet extends JApplet implements ScreenPlayerListener{
 		String page = getParameter("page");
 
 		try{
+			String id = JOptionPane.showInputDialog(this,"Enter the WebCast ID");
+			if(id==null)
+			{
+				return;
+			}
+			
 			XmlElement header = new XmlElement("Player");
+			header.addAttribute("id",id);
 			header.addChild("alias").addValue( StringGenerator.generateUniqueId() );
 			
 			System.out.println("Opening "+address+":"+port+" page:"+page);
