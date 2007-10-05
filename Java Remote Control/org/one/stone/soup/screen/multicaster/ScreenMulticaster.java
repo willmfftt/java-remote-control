@@ -10,13 +10,17 @@ import org.one.stone.soup.screen.recorder.FrameDecompressor;
 
 public class ScreenMulticaster implements Runnable{
 
+	private String id;
+	private ScreenMulticasterSessionListener listener;
 	private int frameSize;
 	private FrameDecompressor decompressor;
 	private Hashtable compressors = new Hashtable();
 	private OutputStream pingStream;
 	
-	public ScreenMulticaster(OutputStream pingStream,InputStream iStream,int frameSize)
+	public ScreenMulticaster(OutputStream pingStream,InputStream iStream,int frameSize,String id,ScreenMulticasterSessionListener listener)
 	{
+		this.id = id;
+		this.listener = listener;
 		this.pingStream = pingStream;
 		this.frameSize = frameSize;
 		decompressor = new FrameDecompressor( iStream,frameSize );
@@ -63,5 +67,7 @@ public class ScreenMulticaster implements Runnable{
 		{
 			e.printStackTrace();
 		}
+		
+		listener.sessionClosed(id,this);
 	}
 }
