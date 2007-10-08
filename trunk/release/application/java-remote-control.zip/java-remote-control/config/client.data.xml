@@ -1,5 +1,5 @@
 <data source="client-settings" name="client-settings">
-	<serverAddress></serverAddress>
+	<serverAddress>127.0.0.1</serverAddress>
 	<serverPort>169</serverPort>
 	<useHub>false</useHub>
 	<userName></userName>
