@@ -1,6 +1,7 @@
 package org.one.stone.soup.xapp.application.jrc.client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
@@ -18,6 +19,7 @@ public class XappJavaRemoteControlView extends XappSwingImage implements RemoteC
 	private XappJavaRemoteControlClient controller;
 	private JFrame tempFrame;
 	private ImageIcon viewIcon;
+	private boolean firstFrame = true;
 	
 	public XappJavaRemoteControlView(XuiResourceManager resourceManager,XappJavaRemoteControlClient controller)
 	{
@@ -72,7 +74,15 @@ public class XappJavaRemoteControlView extends XappSwingImage implements RemoteC
 		{
 			return;
 		}
+		
 		viewIcon.setImage(image);
+		
+		if(firstFrame && image.getWidth(this)!=-1 && image.getHeight(this)!=-1)
+		{
+			controller.doLayout();
+			firstFrame=false;
+		}
+		
 		this.repaint(0);
 	}
 
