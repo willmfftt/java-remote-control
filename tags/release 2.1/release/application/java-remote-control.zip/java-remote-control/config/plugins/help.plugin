@@ -1,0 +1,3 @@
+<plugin class="org.one.stone.soup.xapp.plugin.help.HtmlHelpPlugin" name="Help">
+	<homeUrl>http://help.onestonesoup.org/JavaRemoteControl</homeUrl>
+</plugin>

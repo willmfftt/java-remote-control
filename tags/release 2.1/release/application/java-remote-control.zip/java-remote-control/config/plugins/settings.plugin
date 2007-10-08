@@ -1,0 +1,262 @@
+<plugin class="org.one.stone.soup.xapp.plugin.settings.XApplicationSettings" name="Application Settings">
+	<form cellPadding="3" rowPadding="2" name="Application Settings Form">
+
+		<tr>
+
+			<td colspan="2">
+
+				<h size="16" style="BOLD" face="Arial">
+
+<![CDATA[Application Settings]]>
+
+				</h>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td colspan="2">
+
+				<separator width="300"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Width]]>
+
+			</td>
+
+			<td>
+
+				<input type="text" name="width" format="Integer" value="100" size="5"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Height]]>
+
+			</td>
+
+			<td>
+
+				<input type="text" name="height" format="Integer" value="100" size="5"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Auto Save]]>
+
+			</td>
+
+			<td>
+
+				<input type="checkbox" name="autosave" value="true"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td colspan="2">
+
+<![CDATA[File Browser Directories]]>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td colspan="2">
+
+				<textarea name="fileBrowser" cols="40" rows="5"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Root Directory]]>
+
+			</td>
+
+			<td>
+
+				<input type="directory" name="root" value="" size="30"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+				<input type="button" name="applySettings" value="Apply"/>
+
+			</td>
+
+		</tr>
+
+	</form>
+
+	<form cellPadding="3" rowPadding="2" name="Xml Application Settings Form">
+
+		<tr>
+
+			<td colspan="2">
+
+				<h size="16" style="BOLD" face="Arial">
+
+<![CDATA[Application Settings]]>
+
+				</h>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td colspan="2">
+
+				<separator width="300"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Width]]>
+
+			</td>
+
+			<td>
+
+				<input type="text" name="width" format="Integer" value="100" size="5"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Height]]>
+
+			</td>
+
+			<td>
+
+				<input type="text" name="height" format="Integer" value="100" size="5"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Auto Save]]>
+
+			</td>
+
+			<td>
+
+				<input type="checkbox" name="autosave" value="true"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td colspan="2">
+
+<![CDATA[File Browser Directories]]>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td colspan="2">
+
+				<textarea name="fileBrowser" cols="40" rows="5"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Root Directory]]>
+
+			</td>
+
+			<td>
+
+				<input type="directory" name="root" value="" size="30"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+<![CDATA[Schema]]>
+
+			</td>
+
+			<td>
+
+				<input type="file" name="schema" value="" size="30"/>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+
+				<input type="button" name="applySettings" value="Apply"/>
+
+			</td>
+
+		</tr>
+
+	</form>
+
+</plugin>
