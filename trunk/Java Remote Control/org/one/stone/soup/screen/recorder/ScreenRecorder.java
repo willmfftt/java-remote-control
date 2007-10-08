@@ -195,10 +195,12 @@ public abstract class ScreenRecorder implements Runnable{
 	{
 		triggerRecordingStop();
 		
-		while(running == true)
+		int count = 0;
+		while(running == true && count<10)
 		{
 			try{ Thread.sleep(100);
 			}catch(Exception e){}
+			count++;
 		}
 		
 		try{

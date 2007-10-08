@@ -1,5 +1,6 @@
 package org.one.stone.soup.xapp.application.jrc.client;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,6 +13,7 @@ import java.io.InputStream;
 import java.net.Socket;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import org.one.stone.soup.constants.TimeConstants;
 import org.one.stone.soup.exception.ExceptionHelper;
@@ -32,6 +34,7 @@ import org.one.stone.soup.xapp.components.form.XForm;
 import org.one.stone.soup.xapp.containers.XappContainer;
 import org.one.stone.soup.xapp.filebrowser.XappFileBrowser;
 import org.one.stone.soup.xapp.resource.manager.DefaultXuiResourceManager;
+import org.one.stone.soup.xapp.swing.components.XappSwingScrollPane;
 import org.one.stone.soup.xml.XmlElement;
 import org.one.stone.soup.xml.stream.XmlLoader;
 
@@ -43,6 +46,7 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 	private boolean fullscreen = false;
 	
 	private XappJavaRemoteControlView client;
+	private JPanel panel;
 	
 	private Connection mainConnection;
 	private Connection controlConnection;
@@ -327,6 +331,10 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 			screenPlayer.play();
 			
 			timeoutTimer.start();
+			
+			//client.doLayout();
+			//panel.doLayout();
+			//((XappSwingScrollPane)XappRootApplication.getComponent("view")).doLayout();			
 		}
 		catch(Exception e)
 		{
@@ -336,9 +344,18 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 		
 	}
 
+	public void doLayout()
+	{
+		panel.doLayout();
+	}
+	
 	public void showClient()
 	{
-		((XappContainer)XappRootApplication.getComponent("view")).add(client);
+		panel = new JPanel();
+		panel.setLayout( new FlowLayout(FlowLayout.LEFT) );
+		panel.add(client);
+		
+		((XappSwingScrollPane)XappRootApplication.getComponent("view")).add(panel);
 		client.addKeyListener(this);
 	}
 	
