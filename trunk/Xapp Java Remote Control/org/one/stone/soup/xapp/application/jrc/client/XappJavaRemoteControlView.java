@@ -3,6 +3,7 @@ package org.one.stone.soup.xapp.application.jrc.client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
 
@@ -42,7 +43,8 @@ public class XappJavaRemoteControlView extends XappSwingImage implements RemoteC
 				tempFrame.setUndecorated(true);
 				tempFrame.addKeyListener(controller);
 				
-				tempFrame.add(this,BorderLayout.CENTER);
+				tempFrame.setLayout( new FlowLayout() );
+				tempFrame.add(this);
 				
 				device.setFullScreenWindow(tempFrame);
 				this.setVisible(true);
