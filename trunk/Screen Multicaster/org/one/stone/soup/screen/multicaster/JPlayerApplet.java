@@ -56,16 +56,31 @@ public class JPlayerApplet extends JApplet implements ScreenPlayerListener{
 	public void init()
 	{
 		String address = getParameter("address");
+		if(address==null)
+		{
+			address=this.getCodeBase().getHost();
+		}
 		String port = getParameter("port");
+		if(port==null)
+		{
+			port = "80";
+		}
 		String page = getParameter("page");
-
-		try{
-			String id = JOptionPane.showInputDialog(this,"Enter the WebCast ID");
-			if(id==null)
-			{
-				return;
-			}
-			
+		if(page==null)
+		{
+			page = "/OpenForum/ScreenShare/Play";
+		}
+		String id = getParameter("id");
+		if(id==null)
+		{
+			id = JOptionPane.showInputDialog(this,"Enter the WebCast ID");
+		}
+		if(id==null)
+		{
+			return;
+		}
+		
+		try{	
 			XmlElement header = new XmlElement("Player");
 			header.addAttribute("id",id);
 			header.addChild("alias").addValue( StringGenerator.generateUniqueId() );
