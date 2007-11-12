@@ -1,6 +1,12 @@
 package org.one.stone.soup.xapp.application.jrc.client;
 
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -23,7 +29,6 @@ import org.one.stone.soup.net.SocketConnection;
 import org.one.stone.soup.remote.control.client.RemoteClientController;
 import org.one.stone.soup.remote.control.hub.HubHelper;
 import org.one.stone.soup.screen.recorder.ScreenPlayer;
-import org.one.stone.soup.server.http.client.HttpTunnelConnection;
 import org.one.stone.soup.stringhelper.StringArrayHelper;
 import org.one.stone.soup.util.TimeWatch;
 import org.one.stone.soup.xapp.XApplication;
@@ -31,9 +36,9 @@ import org.one.stone.soup.xapp.XappRootApplication;
 import org.one.stone.soup.xapp.components.XappProgressBar;
 import org.one.stone.soup.xapp.components.XappTextArea;
 import org.one.stone.soup.xapp.components.form.XForm;
-import org.one.stone.soup.xapp.containers.XappContainer;
 import org.one.stone.soup.xapp.filebrowser.XappFileBrowser;
 import org.one.stone.soup.xapp.resource.manager.DefaultXuiResourceManager;
+import org.one.stone.soup.xapp.swing.components.XappSwingApplicationFrame;
 import org.one.stone.soup.xapp.swing.components.XappSwingScrollPane;
 import org.one.stone.soup.xml.XmlElement;
 import org.one.stone.soup.xml.stream.XmlLoader;
@@ -317,7 +322,6 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 				client.getView().addMouseListener(this);
 				client.getView().addMouseMotionListener(this);
 				client.getView().addKeyListener(this);
-				client.getView().addKeyListener(this);
 			}
 			else
 			{
@@ -357,6 +361,8 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 		
 		((XappSwingScrollPane)XappRootApplication.getComponent("view")).add(panel);
 		client.addKeyListener(this);
+		panel.addKeyListener(this);
+		((XappSwingApplicationFrame)this.getFrame()).addKeyListener(this);
 	}
 	
 	public void disconnect()
@@ -512,12 +518,10 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		((XappSwingApplicationFrame)getFrame()).setCursor(Cursor.CROSSHAIR_CURSOR);		
 	}
 
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		((XappSwingApplicationFrame)getFrame()).setCursor(Cursor.DEFAULT_CURSOR);		
 	}
 }
