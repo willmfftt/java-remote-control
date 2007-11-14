@@ -369,6 +369,10 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 	{
 		if(clientRunning==false)
 		{
+			if(fullscreen)
+			{
+				setFullscreen();
+			}
 			XappRootApplication.displayMessage("Client not connected.");
 			return;
 		}

@@ -1,9 +1,11 @@
 package org.one.stone.soup.xapp.application.jrc.client;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -11,6 +13,7 @@ import javax.swing.JFrame;
 import org.one.stone.soup.grfx.ImageFactory;
 import org.one.stone.soup.remote.control.client.RemoteControlClient;
 import org.one.stone.soup.xapp.resource.manager.XuiResourceManager;
+import org.one.stone.soup.xapp.swing.components.XappSwingApplicationFrame;
 import org.one.stone.soup.xapp.swing.components.XappSwingImage;
 
 public class XappJavaRemoteControlView extends XappSwingImage implements RemoteControlClient {
@@ -40,6 +43,7 @@ public class XappJavaRemoteControlView extends XappSwingImage implements RemoteC
 				tempFrame = new JFrame();
 				tempFrame.setUndecorated(true);
 				tempFrame.addKeyListener(controller);
+				tempFrame.setCursor(Cursor.CROSSHAIR_CURSOR);
 				
 				tempFrame.setLayout( new FlowLayout() );
 				tempFrame.add(this);
