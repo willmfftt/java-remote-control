@@ -77,23 +77,6 @@
 	<td colspan="2">
 	<separator width="300"/>
 	</td>
-		</tr>
-		<tr>
-	<td>Connect through http tunnel</td>
-			<td>
-				<input type="checkbox" name="useTunnel"/>
-			</td>
-		</tr>
-		<tr>
-	<td align="right">Tunnel Host</td>
-			<td>
-				<input type="text" name="tunnelHost" value="tunnelHost"/>
-			</td>
-		</tr>
-		<tr>
-	<td colspan="2">
-	<separator width="300"/>
-	</td>
 		</tr>		
 		<tr>
 	<td align="right">Connect to User</td>
