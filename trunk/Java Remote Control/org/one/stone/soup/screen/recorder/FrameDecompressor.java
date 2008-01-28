@@ -107,7 +107,7 @@ public class FrameDecompressor {
 			i = frame.iStream.read();
 			zSize += i;
 
-			System.out.println("Zipped Frame size:"+zSize);
+			//System.out.println("Zipped Frame size:"+zSize);
 			
 			byte[] zData = new byte[zSize];
 			int readCursor = 0;

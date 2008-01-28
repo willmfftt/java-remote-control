@@ -334,7 +334,7 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 			
 			screenPlayer.play();
 			
-			timeoutTimer.start();
+			timeoutTimer.startTimer();
 			
 			//client.doLayout();
 			//panel.doLayout();
@@ -377,7 +377,7 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 			return;
 		}
 		
-		timeoutTimer.stop();
+		timeoutTimer.stopTimer();
 		
 		try{
 			client.getView().removeMouseListener(this);
@@ -476,7 +476,7 @@ public class XappJavaRemoteControlClient extends XApplication implements RemoteC
 		XmlElement packet = new XmlElement("nextFrame");
 		sendCommand(packet);
 		
-		timeoutTimer.reset();
+		timeoutTimer.resetTimer();
 	}
 
 	private synchronized void sendCommand(XmlElement packet)

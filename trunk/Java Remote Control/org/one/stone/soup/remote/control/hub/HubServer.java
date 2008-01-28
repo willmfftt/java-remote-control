@@ -82,7 +82,7 @@ public class HubServer extends PlainServer implements ConnectionListener,ActionL
 
 	private TimeWatch connectionChecker;
 	
-	public HubServer(String address,int port,String alias,Authenticator authenticator,Logger logger)
+	public HubServer(String address,int port,String alias,Authenticator authenticator,Logger logger) throws Exception
 	{
 		this.alias = alias;
 		this.authenticator = authenticator;
@@ -92,7 +92,7 @@ public class HubServer extends PlainServer implements ConnectionListener,ActionL
 		connectionChecker = new TimeWatch(5000);
 		connectionChecker.setActionCommand("check connections");
 		connectionChecker.addActionListener(this);
-		connectionChecker.start();
+		connectionChecker.startTimer();
 	}
 
 	public void stop()
@@ -164,7 +164,7 @@ public class HubServer extends PlainServer implements ConnectionListener,ActionL
 		lastDataSize = dataSent;
 		sessionListener.logData( sessionCount,dataSize,maxDataSize );
 		
-		connectionChecker.start();
+		connectionChecker.startTimer();
 	}
 
 	/* (non-Javadoc)
