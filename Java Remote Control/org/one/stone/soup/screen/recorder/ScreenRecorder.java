@@ -176,6 +176,10 @@ public abstract class ScreenRecorder implements Runnable{
 	{		
 		recordArea = initialiseScreenCapture();
 		
+		if(recordArea==null)
+		{
+			return;
+		}
 		try{
 			oStream.write( (recordArea.width & 0x0000FF00) >>>8 );
 			oStream.write( (recordArea.width & 0x000000FF) );

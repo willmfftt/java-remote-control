@@ -120,7 +120,7 @@ public class ScreenPlayer implements Runnable{
 					try{ Thread.sleep(100); }catch(Exception e){}
 				}
 				
-				System.out.println( "FrameTime:"+frameTime+">"+(System.currentTimeMillis()-startTime));
+				//System.out.println( "FrameTime:"+frameTime+">"+(System.currentTimeMillis()-startTime));
 			}
 			
 			lastFrameTime=frameTime;

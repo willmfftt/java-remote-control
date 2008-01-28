@@ -179,7 +179,7 @@ public class XappJavaRemoteControlServer extends XApplication implements RemoteC
 		setData("server-settings",data);
 	}
 
-	public void start()
+	public void start() throws Exception
 	{
 		if(serverRunning==true)
 		{
@@ -290,7 +290,7 @@ public class XappJavaRemoteControlServer extends XApplication implements RemoteC
 		}
 	}
 
-	private void initialiseServer()
+	private void initialiseServer() throws Exception
 	{
 		boolean autoAccept = new Boolean(XappRootApplication.getAPI().getField("server-settings","autoAccept")).booleanValue();	
 		String address = XappRootApplication.getAPI().getField("server-settings","serverAddress");
