@@ -254,8 +254,8 @@ public class XappJavaRemoteControlServer extends XApplication implements RemoteC
 		String password = XappRootApplication.getAPI().getField("server-settings","password");
 		String address = XappRootApplication.getAPI().getField("server-settings","hubAddress");
 		int port = Integer.parseInt( XappRootApplication.getAPI().getField("server-settings","hubPort") );
-		boolean useTunnel = new Boolean(XappRootApplication.getAPI().getField("server-settings","useTunnel")).booleanValue();	
-		String tunnelHost = XappRootApplication.getAPI().getField("server-settings","tunnelHost");	
+		boolean useTunnel = false;//new Boolean(XappRootApplication.getAPI().getField("server-settings","useTunnel")).booleanValue();	
+		String tunnelHost = null;//XappRootApplication.getAPI().getField("server-settings","tunnelHost");	
 		
 		server = new RemoteControlServer(this);
 		server.setAutoAccept(autoAccept);
