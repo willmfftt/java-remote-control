@@ -124,68 +124,23 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 			chooser.showOpenDialog(this);
 			target = chooser.getSelectedFile().getAbsolutePath();
 
-			if(target!=null)
-			{
-				try{
-					FileInputStream iStream = new FileInputStream(target);
-					player = new ScreenPlayer(iStream,this);
-					frameCount=0;
-//					player.play();
-//					startTime = System.currentTimeMillis();
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-					return;
-				}
-			}
-
-			play.setActionCommand("play");
-			play.setText("Play");
-
-			text.setText("Ready to play "+new File(target).getName());
+			play();
 		}
 		else if(ev.getActionCommand().equals("play"))
 		{
-			player.play();
-			startTime = System.currentTimeMillis();
-			
-			play.setEnabled(false);
-			pause.setEnabled(true);
-			fastForward.setEnabled(true);
-			stop.setEnabled(true);
-
-			text.setText("Playing "+target);
+			play();
 		}
 		else if(ev.getActionCommand().equals("fastForward"))
 		{
-			play.setEnabled(true);
-			pause.setEnabled(true);
-			fastForward.setEnabled(false);
-			
-			player.fastforward();
-
-			text.setText("Fast Forward "+target);
+			fastForward();
 		}
 		else if(ev.getActionCommand().equals("pause"))
 		{
-			play.setEnabled(true);
-			pause.setEnabled(false);
-			fastForward.setEnabled(true);
-			
-			player.pause();
-			
-			text.setText("Paused "+target);
+			pause();
 		}
 		else if(ev.getActionCommand().equals("stop"))
 		{
-			player.stop();
-						
-			pause.setEnabled(false);
-			fastForward.setEnabled(false);
-			stop.setEnabled(false);
-
-			text.setText("No recording selected");
+			stop();
 		}
 	}
 
@@ -245,6 +200,81 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 	public static void main(String[] args)
 	{
 		JPlayer viewer = new JPlayer();
+		if(args.length==1)
+		{
+			viewer.target = new File(args[1]).getAbsolutePath();
+			viewer.play();
+		}
+	}
+	
+	public boolean open()
+	{
+		if(target!=null)
+		{
+			try{
+				FileInputStream iStream = new FileInputStream(target);
+				player = new ScreenPlayer(iStream,this);
+				frameCount=0;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		play.setActionCommand("play");
+		play.setText("Play");
+
+		text.setText("Ready to play "+new File(target).getName());
+		
+		return true;
+	}
+	
+	public void play()
+	{
+		player.play();
+		startTime = System.currentTimeMillis();
+		
+		play.setEnabled(false);
+		pause.setEnabled(true);
+		fastForward.setEnabled(true);
+		stop.setEnabled(true);
+
+		text.setText("Playing "+target);		
+	}
+	
+	public void fastForward()
+	{
+		play.setEnabled(true);
+		pause.setEnabled(true);
+		fastForward.setEnabled(false);
+		
+		player.fastforward();
+
+		text.setText("Fast Forward "+target);	
+	}
+	
+	public void stop()
+	{
+		player.stop();
+		
+		pause.setEnabled(false);
+		fastForward.setEnabled(false);
+		stop.setEnabled(false);
+
+		text.setText("No recording selected");		
+	}
+	
+	public void pause()
+	{
+		play.setEnabled(true);
+		pause.setEnabled(false);
+		fastForward.setEnabled(true);
+		
+		player.pause();
+		
+		text.setText("Paused "+target);		
 	}
 }
 
