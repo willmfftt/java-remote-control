@@ -1,0 +1,11 @@
+<data source="client-settings" name="client-settings">
+	<serverAddress>127.0.0.1</serverAddress>
+	<serverPort>169</serverPort>
+	<useHub>false</useHub>
+	<userName></userName>
+	<password></password>
+	<hubAddress></hubAddress>
+	<hubPort>169</hubPort>
+	<connectTo></connectTo>
+	<viewOnly>false</viewOnly>
+</data>

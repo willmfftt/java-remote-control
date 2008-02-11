@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry path="Java Remote Control" kind="src"/>
+	<classpathentry path="Xapp Java Remote Control" kind="src"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry path="/One Stone Soup Core" combineaccessrules="false" kind="src"/>
+	<classpathentry path="/One Stone Soup Xapp" combineaccessrules="false" kind="src"/>
+	<classpathentry path="Java Screen Capture" kind="src"/>
+	<classpathentry path="Screen Multicaster" kind="src"/>
+	<classpathentry path="/One Stone Soup Open Forum" combineaccessrules="false" kind="src"/>
+	<classpathentry path="bin" kind="output"/>
+</classpath>
