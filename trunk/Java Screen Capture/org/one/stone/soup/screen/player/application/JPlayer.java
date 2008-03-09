@@ -124,6 +124,7 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 			chooser.showOpenDialog(this);
 			target = chooser.getSelectedFile().getAbsolutePath();
 
+			open();
 			play();
 		}
 		else if(ev.getActionCommand().equals("play"))
@@ -202,7 +203,8 @@ public class JPlayer extends JRootFrame implements ScreenPlayerListener,ActionLi
 		JPlayer viewer = new JPlayer();
 		if(args.length==1)
 		{
-			viewer.target = new File(args[1]).getAbsolutePath();
+			viewer.target = new File(args[0]).getAbsolutePath();
+			viewer.open();
 			viewer.play();
 		}
 	}
