@@ -9,7 +9,7 @@ You can use Java Screen Recorder in two ways
 
 = Details =
 
-== With the user interface
+== With the user interface ==
   *To record use: java -jar screen-recorder.jar
   *To play back use: java -jar screen-player.jar
 
