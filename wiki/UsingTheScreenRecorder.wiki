@@ -4,19 +4,19 @@
 
 The Java Screen Recorder records you desktop as a movie.
 You can use Java Screen Recorder in two ways
-  * With a user interface
-  * As a command line tool
+  *  With a user interface
+  *  As a command line tool
 
 = Details =
 
 == With the user interface ==
-  *To record use: java -jar screen-recorder.jar
-  *To play back use: java -jar screen-player.jar
+  *  To record use: java -jar screen-recorder.jar
+  *  To play back use: java -jar screen-player.jar
 
 *Alternatively you can double-click on the jar files to run them in user interface mode.*
 
 == As a command line tool: ==
-  *To record use: java -jar screen-recorder.jar start <file-name>
-  *To stop recording: java -jar screen-recorder.jar stop <file-name>
+  *  To record use: java -jar screen-recorder.jar start <file-name>
+  *  To stop recording: java -jar screen-recorder.jar stop <file-name>
 
-  *To play recording: java- -jar screen-player.jar <file-name>
+  *  To play recording: java- -jar screen-player.jar <file-name>
