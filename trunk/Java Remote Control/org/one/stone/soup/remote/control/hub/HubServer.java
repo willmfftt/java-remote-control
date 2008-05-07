@@ -33,7 +33,6 @@ public class HubServer extends PlainServer implements ConnectionListener,ActionL
 
 	private Hashtable sessions = new Hashtable();
 	private Authenticator authenticator;
-	private String alias;
 	private Logger logger;
 	
 	private SessionListener sessionListener;
