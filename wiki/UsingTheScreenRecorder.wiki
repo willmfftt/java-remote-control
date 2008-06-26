@@ -21,7 +21,7 @@ You can use Java Screen Recorder in two ways
 
   *  To play recording: java- -jar screen-player.jar <file-name>
 
-== Converting Recordings to Movies
+== Converting Recordings to Movies ==
   *  Download [http://java-remote-control.googlecode.com/files/recording-converter_r1.0.jar recording-converter_r1.0.jar]
   *  At the command line type: recording-converter_r1.0.jar <file to convert>
   *  The file will be converted to a .mov (QuickTime) movie file
