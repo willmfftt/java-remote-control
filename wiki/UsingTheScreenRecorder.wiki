@@ -26,3 +26,5 @@ You can use Java Screen Recorder in two ways
   *  At the command line type: recording-converter_r1.0.jar <file to convert>
   *  The file will be converted to a .mov (QuickTime) movie file
   *  Alternatively type: recording-converter_r1.0.jar <file to convert> <movie file name> <width eg 600> <height 400>
+
+See an example here: [http://www.youtube.com/watch?v=9EXR2fDzLQ0]
