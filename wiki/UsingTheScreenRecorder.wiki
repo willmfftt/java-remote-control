@@ -24,8 +24,8 @@ You can use Java Screen Recorder in two ways
 == Converting Recordings to Movies ==
   * Install Java Media Framework from here :http://java.sun.com/javase/technologies/desktop/media/jmf/2.1.1/download.html
   *  Download [http://java-remote-control.googlecode.com/files/recording-converter_r1.0.jar recording-converter_r1.0.jar]
-  *  At the command line type: recording-converter_r1.0.jar <file to convert>
+  *  At the command line type: java -jar recording-converter_r1.0.jar <file to convert>
   *  The file will be converted to a .mov (QuickTime) movie file
-  *  Alternatively type: recording-converter_r1.0.jar <file to convert> <movie file name> <width eg 600> <height 400>
+  *  Alternatively type: java -jar recording-converter_r1.0.jar <file to convert> <movie file name> <width eg 600> <height 400>
 
 See an example here: [http://www.youtube.com/watch?v=9EXR2fDzLQ0]
