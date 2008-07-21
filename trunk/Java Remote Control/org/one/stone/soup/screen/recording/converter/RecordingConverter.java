@@ -247,6 +247,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 	public RecordingConverter() throws Exception
 	{
 	}
+	
 	public void process(String recordingFile, String movieFile, int width,
 			int height) throws Exception
 	{
@@ -285,6 +286,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		}
 		DataSource dataSource = processor.getDataOutput();
 		DataSink dataSink = Manager.createDataSink(dataSource, mediaLocator);
+		dataSink.addDataSinkListener(this);
 		dataSink.open();
 		processor.start();
 		dataSink.start();
