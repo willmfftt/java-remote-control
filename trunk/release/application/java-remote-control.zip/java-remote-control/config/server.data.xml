@@ -1,10 +1,10 @@
 <data source="server-settings" name="server-settings">
 	<serverAddress>127.0.0.1</serverAddress>
 	<serverPort>169</serverPort>
-	<useHub>true</useHub>
+	<useHub>false</useHub>
 	<userName></userName>
 	<password></password>
 	<hubAddress>abc</hubAddress>
 	<hubPort>169</hubPort>
-	<autoAccept>false</autoAccept>
+	<autoAccept>true</autoAccept>
 </data>

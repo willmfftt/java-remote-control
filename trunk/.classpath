@@ -8,5 +8,6 @@
 	<classpathentry path="Java Screen Capture" kind="src"/>
 	<classpathentry path="Screen Multicaster" kind="src"/>
 	<classpathentry path="/One Stone Soup Open Forum" combineaccessrules="false" kind="src"/>
+	<classpathentry path="/One Stone Soup Open Forum/Wiki Web Cam/lib/jmf.jar" kind="lib"/>
 	<classpathentry path="bin" kind="output"/>
 </classpath>
