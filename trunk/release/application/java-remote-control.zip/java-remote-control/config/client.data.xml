@@ -7,5 +7,5 @@
 	<hubAddress></hubAddress>
 	<hubPort>169</hubPort>
 	<connectTo></connectTo>
-	<viewOnly>true</viewOnly>
+	<viewOnly>false</viewOnly>
 </data>
