@@ -45,11 +45,13 @@ public abstract class ScreenRecorder implements Runnable{
 	private class StreamPacker implements Runnable
 	{	
 		private Queue queue = new Queue();
-		private FrameCompressor compressor;
+		private FrameCompressionAlgorithmV1 compressor;
+		private FramePacket packet;
 		
 		public StreamPacker( OutputStream oStream,int frameSize )
 		{
-			compressor = new FrameCompressor( oStream,frameSize );
+			packet = new FramePacket(frameSize);
+			compressor = new FrameCompressionAlgorithmV1();
 			
 			new Thread(this,"Stream Packer").start();
 		}
@@ -71,7 +73,11 @@ public abstract class ScreenRecorder implements Runnable{
 				{
 					DataPack pack = (DataPack)queue.get();
 					try{
-						compressor.pack( pack.newData,pack.frameTime,reset );
+						if(reset==true) { packet.resetPreviousFrame(); }
+						packet.prepareFrame();
+						packet.setCurrentFrame(pack.newData);
+						compressor.compress( packet );
+						packet.write(oStream, (int)frameTime);
 						
 						if(reset==true)
 						{

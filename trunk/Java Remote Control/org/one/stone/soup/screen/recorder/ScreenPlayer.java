@@ -21,6 +21,8 @@ public class ScreenPlayer implements Runnable{
 	private Rectangle area;
 
 	private FrameDecompressor decompressor;
+	private FramePacket packet;
+	private InputStream iStream;
 	
 	private long startTime;
 	private long frameTime;
@@ -43,9 +45,12 @@ public class ScreenPlayer implements Runnable{
 			height = height << 8;
 			height += iStream.read();
 			
+			this.packet = new FramePacket(width*height);
+			this.iStream = iStream;
+			
 			area = new Rectangle(width,height);
 			
-			decompressor = new FrameDecompressor(iStream,width*height);
+			decompressor = new FrameCompressionAlgorithmV2();
 		}
 		catch(Exception e)
 		{
@@ -132,31 +137,24 @@ public class ScreenPlayer implements Runnable{
 	
 	private void readFrame() throws IOException
 	{
-		FrameDecompressor.FramePacket frame = decompressor.unpack();
-		
-		frameTime = frame.getTimeStamp();
-		
-		int result = frame.getResult();
-		if( result==0 )
-		{
-			return;
-		}
-		else if( result==-1 )
+		frameTime = packet.read(iStream);
+		if(packet.getCompressedFrameSize()<0)
 		{
 			running=false;
 			return;
 		}
+		decompressor.decompress( packet );
 		
 		if(mis==null)
 		{
-			mis = new MemoryImageSource(area.width,area.height,frame.getData(),0,area.width);
+			mis = new MemoryImageSource(area.width,area.height,packet.getCurrentFrame(),0,area.width);
 			mis.setAnimated(true);
 			listener.showNewImage( Toolkit.getDefaultToolkit().createImage(mis) );
 			return;
 		}
 		else
 		{
-			mis.newPixels(frame.getData(),ColorModel.getRGBdefault(),0,area.width);
+			mis.newPixels(packet.getCurrentFrame(),ColorModel.getRGBdefault(),0,area.width);
 			return;
 		}		
 	}

@@ -9,15 +9,21 @@ import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.one.stone.soup.screen.recorder.FrameCompressor;
+import org.one.stone.soup.screen.recorder.FrameCompressionAlgorithmV1;
+import org.one.stone.soup.screen.recorder.FrameCompressionAlgorithmV2;
 import org.one.stone.soup.screen.recorder.FrameDecompressor;
+import org.one.stone.soup.screen.recorder.FramePacket;
 
 public class ScreenMulticaster implements Runnable{
 
 	private String id;
 	private ScreenMulticasterSessionListener listener;
 	private int frameSize;
+	
 	private FrameDecompressor decompressor;
+	private FramePacket packet;
+	private InputStream iStream;
+	
 	private Hashtable clients = new Hashtable();
 	private OutputStream pingStream;
 	private Socket socket;
@@ -26,7 +32,7 @@ public class ScreenMulticaster implements Runnable{
 	{
 		private Socket clientSocket;
 		private OutputStream outputStream;
-		private FrameCompressor compressor;
+		private FrameCompressionAlgorithmV1 compressor;
 		private Timer timeout;
 		
 		public class TimedOut extends TimerTask
@@ -52,10 +58,10 @@ public class ScreenMulticaster implements Runnable{
 			timeout = new Timer("Timeout Timer for "+socket);
 			timeout.schedule(new TimedOut(),3000);
 			
-			this.compressor = new FrameCompressor(outputStream,frameSize);
+			this.compressor = new FrameCompressionAlgorithmV1();
 		}
 		
-		public FrameCompressor getCompressor()
+		public FrameCompressionAlgorithmV1 getCompressor()
 		{
 			return compressor;
 		}
@@ -72,12 +78,12 @@ public class ScreenMulticaster implements Runnable{
 	{
 		this.socket = socket;
 		pingStream = socket.getOutputStream();
-		InputStream iStream = socket.getInputStream();
+		iStream = socket.getInputStream();
 		
 		this.id = id;
 		this.listener = listener;
 		this.frameSize = frameSize;
-		decompressor = new FrameDecompressor( iStream,frameSize );
+		decompressor = new FrameCompressionAlgorithmV2();
 		
 		new Thread(this,"Screen Multicaster").start();
 	}
@@ -90,31 +96,21 @@ public class ScreenMulticaster implements Runnable{
 	public void run()
 	{
 		try{
+			packet = new FramePacket(frameSize);
 			while(true)
 			{
-				FrameDecompressor.FramePacket frame = decompressor.unpack();
+				int time = packet.read(iStream);
+				decompressor.decompress(packet);
 				pingStream.write(1);
 				pingStream.flush();
 				
-				if(frame.getData()==null)
-				{
-					continue;
-				}
 				Enumeration keys = clients.keys();
 				while(keys.hasMoreElements())
 				{
 					String alias = (String)keys.nextElement();
 					MulticasterClient client = (MulticasterClient)clients.get(alias);
-					FrameCompressor compressor = (FrameCompressor)(client).getCompressor();
 					
-					try{
-						compressor.pack( frame.getData(),frame.getTimeStamp(),false );
-					}
-					catch(Exception e)
-					{
-						e.printStackTrace();
-						clients.remove(alias);
-					}
+					packet.write( client.outputStream,time );
 					
 					client.resetTimeout();
 				}

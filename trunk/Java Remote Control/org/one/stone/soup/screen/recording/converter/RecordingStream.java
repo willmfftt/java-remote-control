@@ -5,12 +5,18 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.one.stone.soup.screen.recorder.FrameCompressionAlgorithmV2;
 import org.one.stone.soup.screen.recorder.FrameDecompressor;
+import org.one.stone.soup.screen.recorder.FramePacket;
 
 public class RecordingStream {
 	private Rectangle area;
 	private Rectangle outputArea;
+	
 	private FrameDecompressor decompressor;
+	private FramePacket packet;
+	private InputStream iStream;
+	
 	private long frameTime;
 	private boolean finished = false;
 	public RecordingStream(InputStream iStream, int width, int height)
@@ -29,7 +35,9 @@ public class RecordingStream {
 			height += iStream.read();
 			area = new Rectangle(width, height);
 			outputArea = area;
-			decompressor = new FrameDecompressor(iStream, width * height);
+			decompressor = new FrameCompressionAlgorithmV2();
+			packet = new FramePacket(width*height);
+			this.iStream = iStream;
 		}
 		catch (Exception e)
 		{
@@ -38,9 +46,9 @@ public class RecordingStream {
 	}
 	public BufferedImage readFrame() throws IOException
 	{
-		FrameDecompressor.FramePacket frame = decompressor.unpack();
-		frameTime = frame.getTimeStamp();
-		int result = frame.getResult();
+		frameTime = packet.read(iStream);
+		decompressor.decompress(packet);
+		/*int result = frame.getResult();
 		if (result == 0)
 		{
 			return null;
@@ -49,10 +57,10 @@ public class RecordingStream {
 		{
 			finished = true;
 			return null;
-		}
+		}*/
 		BufferedImage bufferedImage = new BufferedImage(area.width,
 				area.height, BufferedImage.TYPE_INT_RGB);
-		bufferedImage.setRGB(0, 0, area.width, area.height, frame.getData(), 0,
+		bufferedImage.setRGB(0, 0, area.width, area.height, packet.getCurrentFrame(), 0,
 				area.width);
 		if (area == outputArea)
 		{
