@@ -9,7 +9,7 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 	private static final int ALPHA = 0xFF000000;
 	
 	public FrameCompressionAlgorithmV1(){}
-	@Override
+
 	public void compress(FramePacket packet)
 	{	
 		int inCursor = 0;
@@ -33,14 +33,20 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 		boolean hasChanges = false;
 		boolean lastEntry = false;
 		
-		while(inCursor<packet.getDataSize())
+		int[] prevFrame = packet.getPreviousFrame();
+		int[] currFrame = packet.getCurrentFrame();
+		byte[] compFrame = packet.getCompressedFrame();
+		
+		int dataSize = packet.getDataSize();
+		
+		while(inCursor < dataSize)
 		{
-			if(inCursor==packet.getDataSize()-1)
+			if(inCursor == dataSize - 1)
 			{
 				lastEntry = true;
 			}
 			
-			if(packet.getCurrentFrame()[inCursor]==packet.getPreviousFrame()[inCursor])
+			if(currFrame[inCursor] == prevFrame[inCursor])
 			{
 				red=0;
 				green=0;
@@ -48,9 +54,9 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 			}
 			else
 			{
-				red = (byte) ((packet.getCurrentFrame()[inCursor] & 0x00FF0000) >>> 16);
-				green = (byte) ((packet.getCurrentFrame()[inCursor] & 0x0000FF00) >>> 8);
-				blue = (byte) ((packet.getCurrentFrame()[inCursor] & 0x000000FF));
+				red = (byte) ((currFrame[inCursor] & 0x00FF0000) >>> 16);
+				green = (byte) ((currFrame[inCursor] & 0x0000FF00) >>> 8);
+				blue = (byte) ((currFrame[inCursor] & 0x000000FF));
 				
 				if(red==0 && green==0 && blue==0)
 				{
@@ -64,41 +70,41 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 				blockBlue == blue
 			)
 			{
-				if(inBlock==false)
+				if(inBlock == false)
 				{
-					if(uncompressedCursor>-1)
+					if(uncompressedCursor > -1)
 					{
 						blocks++;
-						hasChanges=true;
-						packet.getCompressedFrame()[uncompressedCursor] = (byte)(blockSize + 0x80);
+						hasChanges = true;
+						compFrame[uncompressedCursor] = (byte)(blockSize + 0x80);
 					}
-					inBlock=true;
+					inBlock = true;
 					blockSize = 0;
 					blankBlocks = 0;
 				}
-				else if(blockSize==126 || lastEntry==true)
+				else if(blockSize == 126 || lastEntry == true)
 				{
-					if(
-						blockRed==0 &&
-						blockGreen==0 &&
-						blockBlue==0
+					if (
+						blockRed == 0 &&
+						blockGreen == 0 &&
+						blockBlue == 0
 					)
 					{
-						if(blankBlocks>0)
+						if (blankBlocks > 0)
 						{
 							blankBlocks++;
-							packet.getCompressedFrame()[outCursor-1] = (byte)blankBlocks;
+							compFrame[outCursor-1] = (byte) blankBlocks;
 						}
 						else
 						{
 							blocks++;
 							blankBlocks++;
-							packet.getCompressedFrame()[outCursor] = (byte)0xFF;
+							compFrame[outCursor] = (byte)0xFF;
 							outCursor++;
-							packet.getCompressedFrame()[outCursor] = (byte)blankBlocks;
+							compFrame[outCursor] = (byte)blankBlocks;
 							outCursor++;
 						}
-						if(blankBlocks==255)
+						if(blankBlocks == 255)
 						{
 							blankBlocks = 0;
 						}
@@ -106,58 +112,58 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 					else
 					{
 						blocks++;
-						hasChanges=true;
-						packet.getCompressedFrame()[outCursor] = (byte)blockSize;
+						hasChanges = true;
+						compFrame[outCursor] = (byte)blockSize;
 						outCursor++;
-						packet.getCompressedFrame()[outCursor] = blockRed;
+						compFrame[outCursor] = blockRed;
 						outCursor++;
-						packet.getCompressedFrame()[outCursor] = blockGreen;
+						compFrame[outCursor] = blockGreen;
 						outCursor++;
-						packet.getCompressedFrame()[outCursor] = blockBlue;
+						compFrame[outCursor] = blockBlue;
 						outCursor++;
 						
 						blankBlocks = 0;
 					}			
-					inBlock=true;
+					inBlock = true;
 					blockSize = 0;
 				}
 			}
 			else
 			{
-				if(inBlock==true)
+				if(inBlock == true)
 				{
-					if(blockSize>0)
+					if(blockSize > 0)
 					{
 						blocks++;
-						hasChanges=true;
-						packet.getCompressedFrame()[outCursor] = (byte)blockSize;
+						hasChanges = true;
+						compFrame[outCursor] = (byte) blockSize;
 						outCursor++;
-						packet.getCompressedFrame()[outCursor] = blockRed;
+						compFrame[outCursor] = blockRed;
 						outCursor++;
-						packet.getCompressedFrame()[outCursor] = blockGreen;
+						compFrame[outCursor] = blockGreen;
 						outCursor++;
-						packet.getCompressedFrame()[outCursor] = blockBlue;
+						compFrame[outCursor] = blockBlue;
 						outCursor++;
 					}
 
 					uncompressedCursor = -1;
-					inBlock=false;
+					inBlock = false;
 					blockSize = 0;
 					
 					blankBlocks = 0;
 				}
-				else if(blockSize==126 || lastEntry==true)
+				else if(blockSize == 126 || lastEntry == true)
 				{
 					if(uncompressedCursor>-1)
 					{
 						blocks++;
-						hasChanges=true;
-						packet.getCompressedFrame()[uncompressedCursor] = (byte)(blockSize + 0x80);
+						hasChanges = true;
+						compFrame[uncompressedCursor] = (byte)(blockSize + 0x80);
 					}
 					
 					uncompressedCursor = -1;
-					inBlock=false;
-					blockSize=0;
+					inBlock = false;
+					blockSize = 0;
 					
 					blankBlocks = 0;					
 				}
@@ -169,11 +175,11 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 					outCursor++;
 				}
 				
-				packet.getCompressedFrame()[outCursor] = red;
+				compFrame[outCursor] = red;
 				outCursor++;
-				packet.getCompressedFrame()[outCursor] = green;
+				compFrame[outCursor] = green;
 				outCursor++;
-				packet.getCompressedFrame()[outCursor] = blue;
+				compFrame[outCursor] = blue;
 				outCursor++;
 				
 				blockRed = red;
@@ -184,10 +190,11 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 			blockSize++;
 		}
 		
+		packet.setUnzBytesSize(outCursor);
 		try{
 			ByteArrayOutputStream bO = new ByteArrayOutputStream();
 			GZIPOutputStream zO = new GZIPOutputStream(bO);
-			zO.write(packet.getCompressedFrame(),0,outCursor);
+			zO.write(compFrame,0,outCursor);
 			zO.close();
 			bO.close();
 			packet.setCompressedFrame(bO.toByteArray());
@@ -201,23 +208,31 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 	
 	public void decompress(FramePacket packet) {
 		
+		int[] prevFrame = packet.getPreviousFrame();
+		int[] currFrame = packet.getCurrentFrame();
+		int currFrameSize = currFrame.length;
+		
+		byte[] compFrame = packet.getCompressedFrame();
+		int compFrameSize = 0;
+		
 		byte[] zData = new byte[packet.getCompressedFrameSize()];
-		System.arraycopy(packet.getCompressedFrame(), 0, zData, 0, zData.length);
+		System.arraycopy(compFrame, 0, zData, 0, zData.length);
 		
 		try{
 			ByteArrayInputStream biStream = new ByteArrayInputStream( zData,0,zData.length );
 			GZIPInputStream gzipInputStream = new GZIPInputStream( biStream );
 			
-			int sizeRead = gzipInputStream.read(packet.getCompressedFrame());
+			int sizeRead = gzipInputStream.read(compFrame);
 			int cursor=sizeRead;
 
 			while(sizeRead>-1)
 			{
-				sizeRead = gzipInputStream.read(packet.getCompressedFrame(),cursor,10000);
+				sizeRead = gzipInputStream.read(compFrame,cursor,10000);
 				cursor += sizeRead;
 			}
 			
-			packet.setCompressedFrameSize( cursor );
+			compFrameSize = cursor;
+			packet.setCompressedFrameSize(compFrameSize);
 		}
 		catch(Exception e)
 		{
@@ -231,55 +246,59 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 		
 		int rgb = 0xFF000000;
 		
-		//System.out.println("Combineing old:"+frame.previousData+" with new:"+frame.newData);
+		//System.out.println("Combining old:"+frame.previousData+" with new:"+frame.newData);
 		
-		while(inCursor<packet.getCompressedFrameSize() && outCursor<packet.getCurrentFrame().length)
+		while(inCursor < compFrameSize && outCursor < currFrameSize)
 		{
-			if(packet.getCompressedFrame()[inCursor]==-1)
+			if(compFrame[inCursor] == -1)
 			{
 				inCursor++;
 				
-				int count = (packet.getCompressedFrame()[inCursor] & 0xFF);
+				int count = (compFrame[inCursor] & 0xFF);
 				inCursor++;
 				
 				int size = count*126;
-				if(size>packet.getCurrentFrame().length)
+				if( size > currFrameSize)
 				{
-					size = packet.getCurrentFrame().length;
+					size = currFrameSize;
 				}
 				//System.arraycopy(frame.previousData,0,frame.newData,0,size);
 				//outCursor+=size;
 				
-				for(int loop=0;loop<(126*count);loop++)
+				for(int loop=0; loop < (126 * count); loop++)
 				{
 					//frame.newData[outCursor]=blue;//frame.previousData[outCursor];
-					packet.getCurrentFrame()[outCursor]=packet.getPreviousFrame()[outCursor];
+					currFrame[outCursor] = prevFrame[outCursor];
 					//newRawData[outCursor]=blue;
 					outCursor++;
-					if(outCursor==packet.getCurrentFrame().length)
+					if(outCursor == currFrameSize)
 					{
 						break;
 					}
 				}
 				
 			}
-			else if(packet.getCompressedFrame()[inCursor]<0) // uncomp
+			else if (compFrame[inCursor] < 0) // uncomp
 			{
-				blockSize = packet.getCompressedFrame()[inCursor] & 0x7F;//(128+packed[inCursor]);
+				blockSize = compFrame[inCursor] & 0x7F;//(128+packed[inCursor]);
 				inCursor++;
 				
-				for(int loop=0;loop<blockSize;loop++)
+				for(int loop=0; loop < blockSize; loop++)
 				{
-					rgb = ((packet.getCompressedFrame()[inCursor] & 0xFF)<<16) | ((packet.getCompressedFrame()[inCursor+1] & 0xFF)<<8) | (packet.getCompressedFrame()[inCursor+2] & 0xFF) | ALPHA;
-					if(rgb==ALPHA)
+					rgb = ((compFrame[inCursor] & 0xFF)<<16) 
+						| ((compFrame[inCursor+1] & 0xFF) << 8)
+						| (compFrame[inCursor+2] & 0xFF)
+						| ALPHA;
+					
+					if(rgb == ALPHA)
 					{
-						rgb=packet.getPreviousFrame()[outCursor];
+						rgb = prevFrame[outCursor];
 					}
 					//rgb = green;
-					inCursor+=3;
-					packet.getCurrentFrame()[outCursor]=rgb;
+					inCursor += 3;
+					currFrame[outCursor] = rgb;
 					outCursor++;
-					if(outCursor==packet.getCurrentFrame().length)
+					if (outCursor == currFrame.length)
 					{
 						break;
 					}
@@ -287,30 +306,33 @@ public class FrameCompressionAlgorithmV1 implements FrameCompressor,FrameDecompr
 			}
 			else
 			{
-				blockSize = packet.getCompressedFrame()[inCursor];
+				blockSize = compFrame[inCursor];
 				inCursor++;
-				rgb = ((packet.getCompressedFrame()[inCursor] & 0xFF)<<16) | ((packet.getCompressedFrame()[inCursor+1] & 0xFF)<<8) | (packet.getCompressedFrame()[inCursor+2] & 0xFF) | ALPHA;
+				rgb = ((compFrame[inCursor] & 0xFF) << 16)
+					| ((packet.getCompressedFrame()[inCursor+1] & 0xFF) << 8)
+					| (packet.getCompressedFrame()[inCursor+2] & 0xFF)
+					| ALPHA;
 				
 				boolean transparent = false;
-				if(rgb==ALPHA)
+				if(rgb == ALPHA)
 				{
 					transparent = true;
 				}
 				//rgb = red;
-				inCursor+=3;
+				inCursor += 3;
 				
-				for(int loop=0;loop<blockSize;loop++)
+				for (int loop = 0; loop < blockSize; loop++)
 				{
-					if(transparent)
+					if (transparent)
 					{
-						packet.getCurrentFrame()[outCursor]=packet.getPreviousFrame()[outCursor];						
+						currFrame[outCursor] = prevFrame[outCursor];						
 					}
 					else
 					{
-						packet.getCurrentFrame()[outCursor]=rgb;	
+						currFrame[outCursor] = rgb;	
 					}
 					outCursor++;
-					if(outCursor==packet.getCurrentFrame().length)
+					if (outCursor == currFrameSize)
 					{
 						break;
 					}

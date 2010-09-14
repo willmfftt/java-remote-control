@@ -8,6 +8,7 @@ public class FramePacket {
 
 	private int frameSize;
 	private int compressedFrameSize;
+	private int unzBytesSize;
 	private int[] currentFrame;
 	private byte[] compressedFrame;
 	private int[] previousFrame;
@@ -36,6 +37,14 @@ public class FramePacket {
 
 	public void setCompressedFrameSize(int compressedFrameSize) {
 		this.compressedFrameSize = compressedFrameSize;
+	}
+	
+	public int getUnzBytesSize() {
+		return unzBytesSize;
+	}
+
+	public void setUnzBytesSize(int unzBytesSize) {
+		this.unzBytesSize = unzBytesSize;
 	}
 
 	public int getDataSize()
@@ -84,6 +93,17 @@ public class FramePacket {
 			out.write(1);			
 		}
 		
+		// TODO remove this TESTING CODE
+		System.out.println("Uncompressed frame data : " + (frameSize * 4)+ " bytes");
+		System.out.println("RLE encoded data size   : " + unzBytesSize);
+		System.out.println("Gzipped frame data      : " + compressedFrameSize + " bytes");
+		
+		// write out the new frame data length before it was gzipped
+		out.write( (unzBytesSize & 0xFF000000) >>>24 );
+		out.write( (unzBytesSize & 0x00FF0000) >>>16 );
+		out.write( (unzBytesSize & 0x0000FF00) >>>8 );
+		out.write( (unzBytesSize & 0x000000FF) );
+		
 		out.write( (compressedFrameSize & 0xFF000000) >>>24 );
 		out.write( (compressedFrameSize & 0x00FF0000) >>>16 );
 		out.write( (compressedFrameSize & 0x0000FF00) >>>8 );
@@ -112,6 +132,21 @@ public class FramePacket {
 		{
 			return time;
 		}
+		
+		// read the number of bytes in new frame data before it was gzipped
+		int r = in.read();
+		int unz = r;
+		unz = unz << 8;
+		r = in.read();
+		unz += r;
+		unz = unz << 8;
+		r = in.read();
+		unz += r;
+		unz = unz << 8;
+		r = in.read();
+		unz += r;
+		unzBytesSize = unz;
+		
 
 		i = in.read();
 		int zSize = i;

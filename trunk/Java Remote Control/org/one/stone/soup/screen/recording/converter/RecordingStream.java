@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.one.stone.soup.screen.recorder.FrameCompressionAlgorithmV2;
+import org.one.stone.soup.screen.recorder.FrameCompressorFactory;
 import org.one.stone.soup.screen.recorder.FrameDecompressor;
 import org.one.stone.soup.screen.recorder.FramePacket;
 
@@ -35,7 +36,7 @@ public class RecordingStream {
 			height += iStream.read();
 			area = new Rectangle(width, height);
 			outputArea = area;
-			decompressor = new FrameCompressionAlgorithmV2();
+			decompressor = FrameCompressorFactory.getFrameDecompressor();
 			packet = new FramePacket(width*height);
 			this.iStream = iStream;
 		}

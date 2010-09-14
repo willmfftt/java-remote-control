@@ -11,6 +11,8 @@ import java.util.TimerTask;
 
 import org.one.stone.soup.screen.recorder.FrameCompressionAlgorithmV1;
 import org.one.stone.soup.screen.recorder.FrameCompressionAlgorithmV2;
+import org.one.stone.soup.screen.recorder.FrameCompressor;
+import org.one.stone.soup.screen.recorder.FrameCompressorFactory;
 import org.one.stone.soup.screen.recorder.FrameDecompressor;
 import org.one.stone.soup.screen.recorder.FramePacket;
 
@@ -32,7 +34,7 @@ public class ScreenMulticaster implements Runnable{
 	{
 		private Socket clientSocket;
 		private OutputStream outputStream;
-		private FrameCompressionAlgorithmV1 compressor;
+		private FrameCompressor compressor;
 		private Timer timeout;
 		
 		public class TimedOut extends TimerTask
@@ -58,10 +60,10 @@ public class ScreenMulticaster implements Runnable{
 			timeout = new Timer("Timeout Timer for "+socket);
 			timeout.schedule(new TimedOut(),3000);
 			
-			this.compressor = new FrameCompressionAlgorithmV1();
+			this.compressor = FrameCompressorFactory.getFrameCompressor();
 		}
 		
-		public FrameCompressionAlgorithmV1 getCompressor()
+		public FrameCompressor getCompressor()
 		{
 			return compressor;
 		}
@@ -83,7 +85,7 @@ public class ScreenMulticaster implements Runnable{
 		this.id = id;
 		this.listener = listener;
 		this.frameSize = frameSize;
-		decompressor = new FrameCompressionAlgorithmV2();
+		decompressor = FrameCompressorFactory.getFrameDecompressor();
 		
 		new Thread(this,"Screen Multicaster").start();
 	}

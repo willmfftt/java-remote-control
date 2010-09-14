@@ -50,7 +50,7 @@ public class ScreenPlayer implements Runnable{
 			
 			area = new Rectangle(width,height);
 			
-			decompressor = new FrameCompressionAlgorithmV2();
+			decompressor = FrameCompressorFactory.getFrameDecompressor();
 		}
 		catch(Exception e)
 		{
