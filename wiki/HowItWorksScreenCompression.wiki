@@ -1,5 +1,5 @@
 #labels HowItWorks
-#Java Remote Control - Method of Screen Compression
+# Java Remote Control - Method of Screen Compression
 
 
 ==Purpose of this Document==
