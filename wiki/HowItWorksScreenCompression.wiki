@@ -164,9 +164,9 @@ Else
     * This is a run of changed pixels of the same color
     * The value is the size of the block
     * Read a block of three unsigned bytes
-          o Byte 0: red
-          o Byte 1: green
-          o Byte 2: blue
+          #* Byte 0: red
+          #* Byte 1: green
+          #* Byte 2: blue
     * If all three bytes are 0, do not replace the pixels of the previous frame
     * else replace size (the size of the block) pixels with the given color
 
