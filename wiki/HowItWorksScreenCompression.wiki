@@ -103,9 +103,9 @@ Else if a number of pixels (up to 126) have the same color (a compressed run)
     * Write the number of pixels in the run as a byte
     * Write the RGB value pixel of the pixel as three unsigned byte values:
 
-          o Byte 0: red (0-255)
-          o Byte 1: green (0-255)
-          o Byte 2: blue (0-255)
+          ** Byte 0: red (0-255)
+          ** Byte 1: green (0-255)
+          ** Byte 2: blue (0-255)
 
 
 Else (an uncompressed run)
@@ -113,9 +113,9 @@ Else (an uncompressed run)
     * Write the number of pixels in the run (a 7 bit value) as a byte and set bit 7 (most significant bit) to 1, making it a negative signed byte
     * Write the  RGB value of each as three unsigned byte values:
 
-          o Byte 0: red (0-255)
-          o Byte 1: green (0-255)
-          o Byte 2: blue (0-255)
+          ** Byte 0: red (0-255)
+          ** Byte 1: green (0-255)
+          ** Byte 2: blue (0-255)
 
 ----
 ==The RLE Decompression Algorithm==
