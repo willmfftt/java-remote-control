@@ -15,7 +15,7 @@ Currently all keyboard activity can be sent, but only mouse position and button 
 
 ----
 ==The Protocol==
-You can see  a receiver implementation in Java here
+You can see  a receiver implementation in Java [http://code.google.com/p/java-remote-control/source/browse/tags/release%202.2/Java%20Remote%20Control/org/one/stone/soup/remote/control/server/ControlConnection.java#51 here]
 
 
 The protocol is based on XML formatted packets. Each packet is a self contained XML document. No document header or name space information is sent as the data is not intended for applications that do not know the protocol.
