@@ -24,7 +24,8 @@ public abstract class ScreenRecorder implements Runnable{
 	
 	private boolean recording = false;
 	private boolean running = false;
-
+	protected boolean showMouse = false;
+	
 	private long startTime;
 	private long frameTime;
 	private boolean reset;
@@ -100,9 +101,9 @@ public abstract class ScreenRecorder implements Runnable{
 	}
 	private StreamPacker streamPacker;
 	
-	public ScreenRecorder(OutputStream oStream,ScreenRecorderListener listener)
+	public ScreenRecorder(OutputStream oStream,ScreenRecorderListener listener,boolean showMouse)
 	{
-		
+		this.showMouse = showMouse;
 		this.listener = listener;
 		this.oStream = oStream;		
 	}
@@ -152,20 +153,24 @@ public abstract class ScreenRecorder implements Runnable{
 	}
 
 	public abstract Rectangle initialiseScreenCapture();	
-	public abstract BufferedImage captureScreen(Rectangle recordArea);
+	//public abstract BufferedImage captureScreen(Rectangle recordArea);
+	public abstract int[] captureScreen(Rectangle recordArea);
 	
 	public void recordFrame() throws IOException
 	{
+		/*
 		//long t1 = System.currentTimeMillis();
 		BufferedImage bImage = captureScreen(recordArea);
 		frameTime = System.currentTimeMillis()-startTime;
 		//long t2 = System.currentTimeMillis();
 
 		rawData = new int[frameSize];
-
+		
 		bImage.getRGB(0,0,recordArea.width,recordArea.height,rawData,0,recordArea.width);
 		//long t3 = System.currentTimeMillis();
-		
+		*/
+
+		rawData = captureScreen(recordArea);
 		//packToStream(rawData,newRawData);
 		streamPacker.packToStream( new DataPack(rawData,frameTime) );
 		//long t4 = System.currentTimeMillis();

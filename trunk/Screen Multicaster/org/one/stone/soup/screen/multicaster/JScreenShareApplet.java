@@ -72,7 +72,7 @@ public class JScreenShareApplet extends JApplet implements ScreenRecorderListene
 				socket.getOutputStream().write(header.toXml().getBytes());
 				socket.getOutputStream().flush();
 				
-				recorder = new DesktopScreenRecorder(socket.getOutputStream(),this);
+				recorder = new DesktopScreenRecorder(socket.getOutputStream(),this,true);
 				recorder.startRecording();
 				
 				text.setText("WebCast ID:"+id);

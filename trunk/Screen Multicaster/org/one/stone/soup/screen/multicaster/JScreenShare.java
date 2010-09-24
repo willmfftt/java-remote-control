@@ -72,7 +72,7 @@ public class JScreenShare extends JRootFrame implements ScreenRecorderListener{
 			socket.getOutputStream().write(header.toXml().getBytes());
 			socket.getOutputStream().flush();
 			
-			recorder = new DesktopScreenRecorder(socket.getOutputStream(),this);
+			recorder = new DesktopScreenRecorder(socket.getOutputStream(),this,true);
 			recorder.startRecording();
 		}
 		catch(IOException ioe)

@@ -75,7 +75,7 @@ public class JRecorder extends JRootFrame implements ScreenRecorderListener,Acti
 		try{
 			FileOutputStream oStream = new FileOutputStream(fileName);
 			temp=new File(fileName);
-			recorder = new DesktopScreenRecorder(oStream,this);
+			recorder = new DesktopScreenRecorder(oStream,this,true);
 			recorder.startRecording();
 		}
 		catch(Exception e)

@@ -19,9 +19,9 @@ public class JavaScreenRecorder extends ScreenRecorder implements ScreenCapture{
 	private int height;
 	private Component source;
 	
-	public JavaScreenRecorder(Component source,int width,int height,OutputStream outStream,ScreenRecorderListener listener)
+	public JavaScreenRecorder(Component source,int width,int height,OutputStream outStream,ScreenRecorderListener listener,boolean showMouse)
 	{
-		super(outStream,listener);
+		super(outStream,listener,showMouse);
 		
 		this.source = source;
 		this.width = width;
@@ -32,7 +32,7 @@ public class JavaScreenRecorder extends ScreenRecorder implements ScreenCapture{
 		return new Rectangle(width,height);
 	}
 
-	public BufferedImage captureScreen(Rectangle recordArea)
+	public int[] captureScreen(Rectangle recordArea)
 	{
 		waitingForCapture = true;
 		int count=0;
@@ -47,7 +47,10 @@ public class JavaScreenRecorder extends ScreenRecorder implements ScreenCapture{
 			try{ Thread.sleep(10); }catch(Exception e){}
 		}
 		
-		return renderedImage;
+		int[] rawData = new int[recordArea.width*recordArea.height];
+		renderedImage.getRGB(0,0,recordArea.width,recordArea.height,rawData,0,recordArea.width);
+		
+		return rawData;
 	}		
 	
 	public Graphics prePaint(Graphics grfx,int width,int height)

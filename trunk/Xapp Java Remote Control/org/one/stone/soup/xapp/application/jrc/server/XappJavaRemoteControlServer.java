@@ -244,7 +244,7 @@ public class XappJavaRemoteControlServer extends XApplication implements RemoteC
 
 	public ScreenRecorder getScreenRecorder(OutputStream outputStream,ScreenRecorderListener listener)
 	{
-		return new DesktopScreenRecorder(outputStream,listener);
+		return new DesktopScreenRecorder(outputStream,listener,false);
 	}
 
 	private void initialiseHub()
