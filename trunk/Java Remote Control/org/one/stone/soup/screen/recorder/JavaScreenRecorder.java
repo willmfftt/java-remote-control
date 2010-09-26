@@ -46,10 +46,9 @@ public class JavaScreenRecorder extends ScreenRecorder implements ScreenCapture{
 		{
 			try{ Thread.sleep(10); }catch(Exception e){}
 		}
-		
+
 		int[] rawData = new int[recordArea.width*recordArea.height];
 		renderedImage.getRGB(0,0,recordArea.width,recordArea.height,rawData,0,recordArea.width);
-		
 		return rawData;
 	}		
 	

@@ -35,27 +35,7 @@ public class ScreenPlayer implements Runnable{
 	public ScreenPlayer(InputStream iStream,ScreenPlayerListener listener)
 	{
 		this.listener = listener;
-		
-		try{
-			int width = iStream.read();
-			width = width << 8;
-			width += iStream.read();
-			
-			int height = iStream.read();
-			height = height << 8;
-			height += iStream.read();
-			
-			this.packet = new FramePacket(width*height);
-			this.iStream = iStream;
-			
-			area = new Rectangle(width,height);
-			
-			decompressor = FrameCompressorFactory.getFrameDecompressor();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		this.iStream = iStream;
 	}
 	
 	public void play()
@@ -91,6 +71,26 @@ public class ScreenPlayer implements Runnable{
 	
 	public synchronized void run()
 	{
+		try{
+			int width = iStream.read();
+			width = width << 8;
+			width += iStream.read();
+			
+			int height = iStream.read();
+			height = height << 8;
+			height += iStream.read();
+			
+			this.packet = new FramePacket(width*height);
+			
+			area = new Rectangle(width,height);
+			
+			decompressor = FrameCompressorFactory.getFrameDecompressor();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 		startTime = System.currentTimeMillis();
 		long lastFrameTime = 0;
 		

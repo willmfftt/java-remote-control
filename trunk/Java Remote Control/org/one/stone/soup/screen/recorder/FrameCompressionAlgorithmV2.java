@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 
 public class FrameCompressionAlgorithmV2 implements FrameCompressor,FrameDecompressor{
 
-	@Override
 	public void compress(FramePacket packet) {
 		
 		try{
@@ -27,7 +26,6 @@ public class FrameCompressionAlgorithmV2 implements FrameCompressor,FrameDecompr
 		catch(Exception e){e.printStackTrace();}
 	}
 
-	@Override
 	public void decompress(FramePacket packet) {
 		
 		try{
