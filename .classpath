@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Xapp"/>
+	<classpathentry kind="src" path="Java Screen Capture"/>
+	<classpathentry kind="src" path="Java Remote Control"/>
+	<classpathentry kind="src" path="Xapp Java Remote Control"/>
+	<classpathentry kind="src" path="Screen Multicaster"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/One Stone Soup Open Forum"/>
+	<classpathentry kind="lib" path="/One Stone Soup Open Forum/Wiki Web Cam/lib/jmf.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

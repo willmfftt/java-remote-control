@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="C:/Development/workspace/One Stone Soup Java Remote Control/release/recording-converter.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/One Stone Soup Java Remote Control/recording-converter.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" useSourceFolders="false"/>
+    <manifest generateManifest="true" mainClassHandleIdentifier="=One Stone Soup Java Remote Control/Java Remote Control&lt;org.one.stone.soup.screen.recording.converter{RecordingConverter.java[RecordingConverter" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <javaElement handleIdentifier="=One Stone Soup Core/Core"/>
+        <javaElement handleIdentifier="=One Stone Soup Java Remote Control/Java Remote Control&lt;org.one.stone.soup.screen.recording.converter"/>
+        <javaElement handleIdentifier="=One Stone Soup Java Remote Control/Java Remote Control&lt;org.one.stone.soup.screen.recorder"/>
+    </selectedElements>
+</jardesc>

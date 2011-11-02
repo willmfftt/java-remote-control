@@ -1,0 +1,135 @@
+<project name="One Stone Soup Java Remote Control" default="build-all">
+
+<target name="initialise">
+   	<loadproperties srcFile="build.properties"/>    
+	<setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+	<tstamp>
+	  <format property="TODAY" pattern="dd-MM-yyyy-hh-mm"/>
+	</tstamp>
+	
+	<splash imageurl="http://www.onestonesoup.org/Images/logo.png"
+           useproxy="${use.proxy}"
+           proxy="${proxy.host}" port="${proxy.port}"
+           showduration="5000"/>
+</target>
+
+<target name="clean-up">
+	<delete dir="./work"/>
+	<delete dir="./classes"/>
+</target>
+	
+<target name="get-latest-jars" depends="initialise">
+	<get src="http://onestonesoup.googlecode.com/svn/trunk/release/core.jar" dest="../release/application/java-remote-control.zip/java-remote-control/lib/core.jar"/>
+	<get src="http://onestonessoup-xapp.googlecode.com/svn/trunk/release/xapp.jar" dest="../release/application/java-remote-control.zip/java-remote-control/lib/xapp.jar"/>
+</target>
+
+<target name="build-all" depends="initialise">
+
+	<delete dir="./work"/>
+
+	<copy todir="./work">
+		<fileset dir="../Java Remote Control">
+			<exclude name="**/*.class"/>
+			<exclude name="**/.classpath"/>
+			<exclude name="**/.project"/>
+		</fileset>
+		<fileset dir="../Xapp Java Remote Control">
+			<exclude name="**/*.class"/>
+			<exclude name="**/.classpath"/>
+			<exclude name="**/.project"/>
+		</fileset>
+		<fileset dir="../Java Screen Capture">
+			<exclude name="**/*.class"/>
+			<exclude name="**/.classpath"/>
+			<exclude name="**/.project"/>
+		</fileset>
+		<fileset dir="../Screen Multicaster">
+			<exclude name="**/*.class"/>
+			<exclude name="**/.classpath"/>
+			<exclude name="**/.project"/>
+		</fileset>
+	</copy>
+
+	<delete dir="./classes"/>
+	<mkdir dir="./classes"/>
+
+	<echo message="Compiling"/>
+
+	<javac srcdir="./work"
+		 destdir="./classes"
+		 classpath="./work/lib/core.jar;./work/lib/xapp.jar;./work/lib/open-forum.jar;./work/lib/junit-4.1.jar"
+		 debug="off"
+		 source="1.2" />
+
+	<copy todir="../release/application/java-remote-control.zip/java-remote-control">
+		<fileset dir="./work">
+			<include name="*.jar"/>
+			<include name="lib/*.jar"/>
+		</fileset>
+	</copy>
+	<delete>
+		<fileset dir="./work">
+			<include name="*.jar"/>
+			<include name="lib/*.jar"/>
+		</fileset>
+	</delete>
+	
+	<mkdir dir="../release"/>	
+	
+	<jar destfile="../release/java-remote-control.jar">
+	    <fileset dir="./classes">
+	    	<exclude name="test/**"/>
+	    	<exclude name="**/*.java"/>
+	    </fileset>
+	    <fileset dir="./work/">
+	    	<exclude name="Test Data/**"/>
+	    	<exclude name="test/**"/>
+	    	<exclude name="**/*.java"/>
+	    </fileset>
+  	</jar>
+  	
+	<jar destfile="../release/java-remote-control-with-source.jar">
+	    <fileset dir="./classes"/>
+	    <fileset dir="./work/"/>
+  	</jar>
+
+	<copy file="../release/java-remote-control.jar" tofile="../release/application/java-remote-control.zip/java-remote-control/lib/java-remote-control.jar"/>
+	
+	<zip destfile="../release/java-remote-control.zip">
+	    <fileset dir="../release/application/java-remote-control.zip"/>
+  	</zip> 	
+	
+</target>
+
+<target name="test-all">
+	<delete dir="./test-results"/>
+	<mkdir dir="./test-results"/>
+	<delete dir="./test-report"/>
+	<mkdir dir="./test-report"/>
+
+	<junit printsummary="yes" haltonfailure="no" failureproperty="TESTS_FAILED">
+		<formatter type="xml"/>
+	  
+		<classpath>
+		      <pathelement location="./classes"/>
+		</classpath>
+
+		<batchtest fork="yes" todir="./test-results">
+			<fileset dir="./work">
+				<include name="test/**/*.java"/>
+			</fileset>
+		</batchtest>
+	  
+	</junit>
+	
+	<junitreport todir="./test-report">
+		<fileset dir="./test-results">
+			<include name="TEST-*.xml"/>
+		</fileset>
+		<report format="frames" todir="./test-report"/>
+	</junitreport>
+	
+	<fail if="TESTS_FAILED" message="Tests Failed"/>
+</target>
+
+</project>

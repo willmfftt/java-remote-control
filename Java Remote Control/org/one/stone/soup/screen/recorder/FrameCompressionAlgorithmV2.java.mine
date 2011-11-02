@@ -1,0 +1,311 @@
+package org.one.stone.soup.screen.recorder;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.util.Arrays;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+public class FrameCompressionAlgorithmV2 implements FrameCompressor,FrameDecompressor{
+
+	private final byte ALPHA_BYTE = (byte) 0xFF;
+	private final int ALPHA_INT = 0xFF000000;
+	private final int NO_PREV = 0xE0000000;				// reserved value indicating no previous pixel
+	
+	private final byte BLK_UNCH_BYTE = 0x10;
+	private final byte BLK_COL_BYTE =  0x20;
+	private final int BLK_UNCH_INT =  0x10000000;
+	private final int BLK_COL_INT =   0x20000000;
+	
+	public void compress(FramePacket packet) {
+		
+		final int[] oldData = packet.getPreviousFrame();
+		final int[] newData = packet.getCurrentFrame();
+		final byte[] compData = packet.getCompressedFrame();
+		
+		final int frameLen = oldData.length;
+		
+		if (frameLen != oldData.length) {
+			// TODO : deal with possible resolution change or is this done already?
+		}
+		
+		if (newData.length > 0x0FFFFFFF) {
+			// TODO : frame size limit exceeded (28 bits), do something drastic! (exception?)
+		}
+		
+		int compCursor = 0;					// index for the current 'block' in the compressed frame array data
+		
+
+		// there are 2 types of block: an 'unchanged' block means a run of pixels identical to the corresponding
+		// previous frame and a 'colour' block is a run of identical consecutive pixels.
+
+		boolean inUnchRun = false;			// true if the current cursor position is in a unchanged run
+		boolean unchRunEnd = false;			// true if current cursor position has just left an unchanged run
+		boolean inColRun = false;			// true if the current cursor position is in a colour run
+		boolean colRunEnd = false;			// true if current cursor position has just left an colour run
+		
+		boolean inRunPrev = false;			// true if the previous pixel is considered part of a run
+		
+		int unchRunLen = 0;					// length of the current unchanged run
+		int colRunLen = 1;					// length of the current colour run
+		int colRunVal = 0;					// the ARGB value of the current colour run 
+
+		int newPixel;						// the current ARGB value in the new frame array data
+		int oldPixel;						// the current ARGB value in the old frame array data
+		
+		int newPixelPrev;					// the previous pixel value in the new frame array data
+		
+			int cursor = 1;					// index for the next pixel in the frame array
+		
+		// start comparing the arrays
+		newPixelPrev = NO_PREV;
+		newPixel = newData[0];
+		oldPixel = oldData[0];
+		if (newPixel == oldPixel) {
+			inUnchRun = true;
+			unchRunLen = 1;
+		}
+		
+		// main loop, iterates over entire pixel array
+		while (cursor < frameLen) {
+			inRunPrev = (inUnchRun || inColRun);
+			newPixelPrev = newPixel;
+			newPixel = newData[cursor];
+			oldPixel = oldData[cursor];
+			
+			if (newPixel == oldPixel) {
+				inUnchRun = true;
+				unchRunLen++;
+			} else {
+				if (inUnchRun) {
+					unchRunEnd = true;
+					inUnchRun = false;
+				}
+			}
+			
+			if (newPixel == newPixelPrev) {
+				if(!inColRun) {
+					inColRun = true;
+					inRunPrev = true;
+					colRunVal = newPixel;
+				}
+				colRunLen++;
+			} else {
+				if (inColRun) {
+					colRunEnd = true;
+					inColRun = false;
+				}
+			}
+		
+			// if ended run(s) are detected, determine whether to keep or discard
+			if (colRunEnd || unchRunEnd) {
+				if (colRunLen > unchRunLen) {
+					unchRunLen = inUnchRun ? 1 : 0;
+					unchRunEnd = false;
+				} else {
+					if (colRunEnd) {
+						colRunEnd = false;
+						if (!unchRunEnd && (unchRunLen == colRunLen)) {
+							// special case: don't drop a pixel when there is a colour
+							// run ending and an ongoing unchanged run of same length
+							inRunPrev = false;
+						}
+					}
+					colRunLen = 1;
+				}
+			}
+				
+			// determine which, if any runs need to be written as compressed blocks
+			if (!inRunPrev) {
+				// write out single uncompressed pixel
+				compData[compCursor++] = (byte) ALPHA_BYTE;
+				compData[compCursor++] = (byte) ((newPixelPrev & 0x00FF0000) >>> 16);
+				compData[compCursor++] = (byte) ((newPixelPrev & 0x0000FF00) >>> 8);
+				compData[compCursor++] = (byte) ((newPixelPrev & 0x000000FF));
+			}
+			if (colRunEnd) {
+				// write out colour run compressed block
+				compData[compCursor++] = BLK_COL_BYTE;
+				compData[compCursor++] = (byte) ((colRunLen & 0x00FF0000) >>> 16);
+				compData[compCursor++] = (byte) ((colRunLen & 0x0000FF00) >>> 8);
+				compData[compCursor++] = (byte) ((colRunLen & 0x000000FF));
+				
+				compData[compCursor++] = (byte) ALPHA_BYTE;
+				compData[compCursor++] = (byte) ((colRunVal & 0x00FF0000) >>> 16);
+				compData[compCursor++] = (byte) ((colRunVal & 0x0000FF00) >>> 8);
+				compData[compCursor++] = (byte) ((colRunVal & 0x000000FF));
+				
+				colRunEnd = false;
+				colRunLen = 1;
+				
+			} else {
+				if (unchRunEnd) {
+					// write out unchanged run compressed block
+					compData[compCursor++] = BLK_UNCH_BYTE;
+					compData[compCursor++] = (byte) ((unchRunLen & 0x00FF0000) >>> 16);
+					compData[compCursor++] = (byte) ((unchRunLen & 0x0000FF00) >>> 8);
+					compData[compCursor++] = (byte) ((unchRunLen & 0x000000FF));
+					
+					unchRunEnd = false;
+					unchRunLen = 0;
+				}
+			// no runs are ending, determine whether to write a single pixel	
+			}
+			
+			cursor++;
+		} // main while loop end
+		
+		// Deal with last pixel
+		newPixelPrev = newPixel;
+		if (inColRun)
+			colRunEnd = true;
+		if (inUnchRun)
+			unchRunEnd = true;
+		
+		// if ended run(s) are detected, determine whether to keep or discard
+		if (colRunEnd || unchRunEnd) {
+			if (colRunLen > unchRunLen) {
+				unchRunEnd = false;
+			} else {
+				if (colRunEnd) {
+					colRunEnd = false;
+					if (unchRunLen == colRunLen) {
+						// special case: avoid dropping a pixel
+						inRunPrev = false;
+					}
+				}
+				colRunLen = 1;
+			}
+		}
+			
+		// determine what, if anything needs to be written out
+		if (colRunEnd) {
+			// write out colour run compressed block
+			compData[compCursor++] = BLK_COL_BYTE;
+			compData[compCursor++] = (byte) ((colRunLen & 0x00FF0000) >>> 16);
+			compData[compCursor++] = (byte) ((colRunLen & 0x0000FF00) >>> 8);
+			compData[compCursor++] = (byte) ((colRunLen & 0x000000FF));
+			
+			compData[compCursor++] = (byte) ALPHA_BYTE;
+			compData[compCursor++] = (byte) ((colRunVal & 0x00FF0000) >>> 16);
+			compData[compCursor++] = (byte) ((colRunVal & 0x0000FF00) >>> 8);
+			compData[compCursor++] = (byte) ((colRunVal & 0x000000FF));
+			
+			colRunEnd = false;
+			colRunLen = 1;
+			
+		} else {
+			if (unchRunEnd) {
+				// write out unchanged run compressed block
+				compData[compCursor++] = BLK_UNCH_BYTE;
+				compData[compCursor++] = (byte) ((unchRunLen & 0x00FF0000) >>> 16);
+				compData[compCursor++] = (byte) ((unchRunLen & 0x0000FF00) >>> 8);
+				compData[compCursor++] = (byte) ((unchRunLen & 0x000000FF));
+				
+				unchRunEnd = false;
+				unchRunLen = 0;
+			} else {
+				if (!inRunPrev) {
+					// write out single uncompressed pixel
+					compData[compCursor++] = ALPHA_BYTE;
+					compData[compCursor++] = (byte) ((newPixelPrev & 0x00FF0000) >>> 16);
+					compData[compCursor++] = (byte) ((newPixelPrev & 0x0000FF00) >>> 8);
+					compData[compCursor++] = (byte) ((newPixelPrev & 0x000000FF));
+				}
+			}
+		}
+
+		if (compCursor > 1) {
+			// if there are changes, compress the data further
+			packet.setUnzBytesSize(compCursor);
+			try {
+				ByteArrayOutputStream bO = new ByteArrayOutputStream();
+				GZIPOutputStream zO = new GZIPOutputStream(bO);
+				zO.write(compData,0,compCursor);
+				zO.close();
+				bO.close();
+				packet.setCompressedFrame(bO.toByteArray());
+				packet.setCompressedFrameSize(bO.size());
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			// no changes, indicate this with zero length
+			packet.setCompressedFrameSize(0);
+		}
+	}
+
+
+	public void decompress(FramePacket packet) {
+		
+		GZIPInputStream gzipInputStream = null;
+		int frameSize = packet.getFrameSize();
+		int[] compData = new int[frameSize];
+		int readCursor = 0;
+		int unzSize = packet.getUnzBytesSize(); 
+		byte[] compBytes = new byte[unzSize * 4];
+		
+		try {
+			ByteArrayInputStream biStream = new ByteArrayInputStream( packet.getCompressedFrame(),0,packet.getCompressedFrameSize() );
+			gzipInputStream = new GZIPInputStream( biStream );
+		}
+		catch (Exception e) { e.printStackTrace(); }
+		
+		try {
+			int sizeRead = gzipInputStream.read(compBytes);
+			readCursor=sizeRead;
+			while(readCursor < unzSize) {
+				sizeRead = gzipInputStream.read(compBytes,readCursor,(unzSize - readCursor));
+				readCursor += sizeRead;
+			}
+		} catch (Exception e) {  e.printStackTrace(); }
+
+		
+		int compLen = readCursor / 4;
+		int bIndex = 0;
+		for (int iIndex = 0; iIndex < compLen; iIndex++) {
+			compData[iIndex] =    (int) ((compBytes[bIndex++] & 0xFF) << 24)
+								| (int) ((compBytes[bIndex++] & 0xFF) << 16)
+								| (int) ((compBytes[bIndex++] & 0xFF) << 8)
+								| (int) ((compBytes[bIndex++] & 0xFF));
+		}
+			
+		int[] newFrame = packet.getCurrentFrame();
+		int cursor = 0;
+		int compCursor = 0;
+		int compVal;
+		int count;
+		int colRunVal;
+		
+		// TODO : try different nesting of if-elses and orderings inside this
+		//		loop and compare performance
+		while (cursor < frameSize) {
+			compVal = compData[compCursor];
+			if ((compVal & 0xF0000000) == BLK_UNCH_INT) {
+				count = (compVal & 0x0FFFFFFF);
+				compCursor++;
+				cursor += count;
+			} else {
+				if ((compVal & 0xF0000000) == BLK_COL_INT) {
+					count = (compVal & 0x0FFFFFFF);
+					compCursor++;
+					colRunVal = (compData[compCursor]);
+					compCursor++;
+					while (count > 0) {
+						newFrame[cursor] = colRunVal;
+						cursor++;
+						count--;
+					}
+				} else {
+					newFrame[cursor] = compData[compCursor];
+					cursor++;
+					compCursor++;
+				}
+			}
+		}
+		packet.prepareFrame();
+	}
+}
