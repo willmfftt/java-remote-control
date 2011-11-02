@@ -21,6 +21,10 @@ public class Frame {
 	public int[] getData() {
 		return data;
 	}
+	public void setData(int[] data) {
+		this.data=data;
+	}
+	
 	public void setPixel(int width,int height,int color) {
 		data[width+(size.width*height)]=color;
 	}
