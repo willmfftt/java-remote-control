@@ -1,5 +1,7 @@
 package com.wet.wired.jrc.frame.compression;
 
+import java.awt.Canvas;
+import java.awt.Image;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,10 +18,10 @@ public class RunLengthThenGZCompressorTest extends TestCase {
 	
 	public void setUp() {
 		blankFrame = new Frame(100,100);
-		blankFrame.setAllPixels(0x00000000);
+		blankFrame.setAllPixels(0xFF000000);
 		
 		blueFrame = new Frame(100,100);
-		blueFrame.setAllPixels(0x000000FF);
+		blueFrame.setAllPixels(0xFF0000FF);
 		
 		newFrame = new Frame(100,100);
 	}
@@ -65,7 +67,15 @@ public class RunLengthThenGZCompressorTest extends TestCase {
 		assertEquals(currentFrame.getDataSize(),newFrame.getDataSize());
 		
 		for(int i=0;i<currentFrame.getDataSize();i++) {
-			assertEquals( currentFrame.getData()[i],newFrame.getData()[i] );
+			if(currentFrame.getData()[i]!=newFrame.getData()[i]) {
+				fail("Decompressed data "+currentFrame.getData()[i]+" did not match "+newFrame.getData()[i]+" at index "+i);
+			}
 		}
+	}
+	
+	public static Image loadImage(String fileName) {
+
+		return new Canvas().getToolkit().createImage( fileName );
+		
 	}
 }

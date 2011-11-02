@@ -11,6 +11,7 @@ import com.wet.wired.jrc.frame.Frame;
 
 public class RunLengthThenGZCompressor implements Compressor,Decompressor{
 	private static final int ALPHA = 0xFF000000;
+	private static final int READ_BLOCK_SIZE = 10000;
 
 	private class OutputStreamMonitor extends OutputStream {
 		private OutputStream delegate;
@@ -42,10 +43,12 @@ public class RunLengthThenGZCompressor implements Compressor,Decompressor{
 
 		public void write(byte[] b, int off, int len) throws IOException {
 			delegate.write(b, off, len);
+			writeCount+=len;
 		}
 
 		public void write(byte[] b) throws IOException {
 			delegate.write(b);
+			writeCount+=b.length;
 		}
 
 		public void write(int b) throws IOException {
@@ -257,22 +260,42 @@ public class RunLengthThenGZCompressor implements Compressor,Decompressor{
 		int[] currFrame = currentFrame.getData();
 		int currFrameSize = currFrame.length;
 		
-		byte[] compFrame = new byte[currFrameSize];
+		byte[] compFrame = new byte[currFrameSize*4];
 		int compFrameSize = 0;
 		
 		byte[] zData = new byte[framePacketSize];
-		System.arraycopy(compFrame, 0, zData, 0, zData.length);
+		
+		int maxBlockSize = READ_BLOCK_SIZE;
+		if(maxBlockSize>framePacketSize) {
+			maxBlockSize = framePacketSize;
+		}
+		int sizeRead=in.read(zData,0,maxBlockSize);
+		int cursor=sizeRead;
+		while(sizeRead!=-1 && cursor<framePacketSize) {
+			if(maxBlockSize+cursor>framePacketSize) {
+				maxBlockSize = framePacketSize-cursor;
+			}
+			sizeRead=in.read(zData,cursor,maxBlockSize);
+			if(sizeRead>0) {
+				cursor+=sizeRead;
+			}
+		}
 		
 		ByteArrayInputStream biStream = new ByteArrayInputStream( zData,0,zData.length );
 		GZIPInputStream gzipInputStream = new GZIPInputStream( biStream );
 		
-		int sizeRead = gzipInputStream.read(compFrame);
-		int cursor=sizeRead;
+		sizeRead = gzipInputStream.read(compFrame,0,READ_BLOCK_SIZE);
+		if(sizeRead>0) {
+			cursor+=sizeRead;
+		}
+		cursor=sizeRead;
 
 		while(sizeRead>-1)
 		{
-			sizeRead = gzipInputStream.read(compFrame,cursor,10000);
-			cursor += sizeRead;
+			sizeRead = gzipInputStream.read(compFrame,cursor,READ_BLOCK_SIZE);
+			if(sizeRead>0) {
+				cursor += sizeRead;
+			}
 		}
 		
 		compFrameSize = cursor;
@@ -377,7 +400,11 @@ public class RunLengthThenGZCompressor implements Compressor,Decompressor{
 				}
 			}
 		}
+		if(outCursor<currFrameSize) {
+			currFrame[outCursor]=rgb;
+		}
 		
+		currentFrame.setData(currFrame);
 	}
 
 }
