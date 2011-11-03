@@ -8,8 +8,8 @@ import com.wet.wired.jrc.frame.Frame;
 
 public class ScreenGrabberTest extends TestCase {
 
-	public void testScreenSizeReturned() {
-		Dimension screenSize = new ScreenGrabber().getScreenSize();
+	public void testScreenSizeReturned() throws FrameCaptureException {
+		Dimension screenSize = new ScreenGrabber().getFrameSize();
 		
 		assertNotNull(screenSize);
 		if(screenSize.width==0 || screenSize.height==0) {
@@ -17,7 +17,7 @@ public class ScreenGrabberTest extends TestCase {
 		}
 	}
 	
-	public void testFrameReturned() {
+	public void testFrameReturned() throws FrameCaptureException {
 		Frame frame = new ScreenGrabber().grabFrame();
 		
 		assertNotNull(frame);
@@ -31,13 +31,13 @@ public class ScreenGrabberTest extends TestCase {
 		}
 	}
 	
-	public void testFrameSizeMatchesScreenSize() {
+	public void testFrameSizeMatchesScreenSize() throws FrameCaptureException {
 		ScreenGrabber screenGrabber = new ScreenGrabber();
 		Frame frame = screenGrabber.grabFrame();
-		Dimension screenSize = screenGrabber.getScreenSize();
+		Dimension screenSize = screenGrabber.getFrameSize();
 		Dimension frameSize = frame.getFrameSize();
 		
-		if(frameSize.width!=screenSize.width || frameSize.height!=screenSize.width) {
+		if(frameSize.width!=screenSize.width || frameSize.height!=screenSize.height) {
 			fail( "Frame size must match Screen size" );
 		}
 	}

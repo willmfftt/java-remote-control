@@ -5,6 +5,6 @@ import java.awt.Dimension;
 import com.wet.wired.jrc.frame.Frame;
 
 public interface FrameGrabber {
-	public Dimension getScreenSize();
+	public Dimension getFrameSize();
 	public Frame grabFrame();
 }
