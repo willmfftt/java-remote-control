@@ -1,6 +1,8 @@
-package com.wet.wired.jrc.connector;
+package com.wet.wired.jrc.recorder;
 
 import java.io.OutputStream;
+
+import com.wet.wired.jrc.connector.CaptureConnectionController;
 
 public class FileCaptureConnectionController implements
 		CaptureConnectionController {

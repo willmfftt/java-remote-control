@@ -1,5 +1,5 @@
 package com.wet.wired.jrc.frame.capture;
 
-public interface FrameCaptureController {
+public class FrameCaptureController {
 
 }
