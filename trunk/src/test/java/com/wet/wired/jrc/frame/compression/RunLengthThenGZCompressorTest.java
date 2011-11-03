@@ -33,7 +33,7 @@ public class RunLengthThenGZCompressorTest extends TestCase {
 		Frame currentFrame = blueFrame;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
-		int size = rlgz.compressFrame(lastFrame, currentFrame, out);
+		rlgz.compressFrame(lastFrame, currentFrame, out);
 		
 		if(out.toByteArray().length > currentFrame.getDataSize()*4) {
 			fail("Compressed size greater than original size");
